@@ -14,7 +14,7 @@ Palette: zinc paper, slate, one patina-green accent. Type: Archivo (headings/UI)
 
 ## Photography
 
-All photos are hot-linked from Unsplash and listed in one place: `src/data/images.ts`. Replace any URL with your own photography. A tonal placeholder shows if an image fails to load.
+All photos are hot-linked from Unsplash roofing results and listed in one place: `src/data/images.ts` (project before/after pairs are `p1Before`, `p1After`, and so on). Replace any URL with your own photography. A tonal placeholder shows if an image fails to load.
 
 ## Commands
 

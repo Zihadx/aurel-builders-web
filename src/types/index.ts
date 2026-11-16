@@ -1,8 +1,5 @@
 import type { ImageKey } from "@/data/images";
 
-export type BeforeKind = "worn" | "hail" | "dated";
-export type AfterKind = "seam" | "slate" | "clad";
-
 export interface NavItem {
   label: string;
   href: string;
@@ -112,8 +109,8 @@ export interface ProjectItem {
   summary: string;
   challenge: string;
   resolution: string;
-  before: BeforeKind;
-  after: AfterKind;
+  beforeImage: ImageKey;
+  afterImage: ImageKey;
   beforeLabel: string;
   afterLabel: string;
 }

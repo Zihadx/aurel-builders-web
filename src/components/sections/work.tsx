@@ -2,15 +2,12 @@
 
 import { useState } from "react";
 import { PROJECTS_DATA } from "@/data/projects";
-import dynamic from "next/dynamic";
-import { FadeUp, WordsReveal } from "@/components/ui/motion";
+import { IMAGES } from "@/data/images";
+import { ImageComparison } from "@/components/ui/image-comparison";
+import { FadeUp, ImageReveal, WordsReveal } from "@/components/ui/motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const RoofCompare = dynamic(() => import("@/components/graphics/roof-compare"), {
-  ssr: false,
-  loading: () => <div className="aspect-[4/3] w-full animate-pulse bg-deeper sm:aspect-[16/10]" />,
-});
 
 export function WorkSection() {
   const [activeId, setActiveId] = useState(PROJECTS_DATA[0].id);
@@ -23,7 +20,7 @@ export function WorkSection() {
           <WordsReveal id="work-title" className="t-h2 lg:col-span-7" text="Recent projects, start to finish." />
           <FadeUp className="lg:col-span-5 lg:pt-2">
             <p className="t-body text-mist">
-              Drag the divider across each house to see the old roof and the new one. Sample projects, with the problem we found, what we built and how long it took.
+              Drag the divider across each project to see the roof before and after, with the problem we found, what we built and how long it took.
             </p>
           </FadeUp>
         </div>
@@ -63,15 +60,16 @@ export function WorkSection() {
 
         <div role="tabpanel" id={`panel-${project.id}`} aria-labelledby={`tab-${project.id}`} className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-8">
-            <RoofCompare
-              key={project.id}
-              before={project.before}
-              after={project.after}
-              beforeLabel={project.beforeLabel}
-              afterLabel={project.afterLabel}
-              label={`Before and after 3D comparison: ${project.title}. Drag or use arrow keys.`}
-            />
-            <p className="t-meta mt-3 text-mist">Drag the divider, or use the arrow keys, to compare the same house before and after.</p>
+            <ImageReveal key={project.id}>
+              <ImageComparison
+                before={IMAGES[project.beforeImage]}
+                after={IMAGES[project.afterImage]}
+                beforeLabel={project.beforeLabel}
+                afterLabel={project.afterLabel}
+                label={`Before and after comparison: ${project.title}. Drag or use arrow keys.`}
+              />
+            </ImageReveal>
+            <p className="t-meta mt-3 text-mist">Drag the divider, or use the arrow keys, to compare before and after. Sample photos, replaced with your own project photography at launch.</p>
           </div>
 
           <div className="lg:col-span-4">

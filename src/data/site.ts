@@ -82,7 +82,7 @@ export const SITE_CONFIG: SiteConfig = {
         wind: "Up to 140 mph, Class-4",
         underlayment: "High-temperature ice and water shield",
         thermal: "Solar-reflective cool-roof finish",
-        image: "project1",
+        image: "materialMetal",
       },
       {
         id: "slate",
@@ -92,7 +92,7 @@ export const SITE_CONFIG: SiteConfig = {
         wind: "Up to 130 mph, Class-4 hail and fire",
         underlayment: "Double-layer synthetic",
         thermal: "High thermal mass buffers temperature swings",
-        image: "project2",
+        image: "materialSlate",
       },
       {
         id: "shingle",
@@ -102,7 +102,7 @@ export const SITE_CONFIG: SiteConfig = {
         wind: "Up to 130 mph, UL 2218 Class-4",
         underlayment: "Breathable synthetic plus valley ice shield",
         thermal: "Balanced ridge and soffit airflow",
-        image: "serviceInspection",
+        image: "materialShingle",
       },
     ],
   },

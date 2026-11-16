@@ -16,10 +16,10 @@ export const PROJECTS_DATA: ProjectItem[] = [
       "Recurring ice-dam leaks in the valleys and heavy attic heat gain across three intersecting roof planes.",
     resolution:
       "Ice-and-water membrane over the whole deck, ventilated furring channels, and custom-seamed metal panels.",
-    before: "worn",
-    after: "seam",
-    beforeLabel: "Worn asphalt shingle",
-    afterLabel: "Standing-seam metal",
+    beforeImage: "p1Before",
+    afterImage: "p1After",
+    beforeLabel: "Old shingles stripped",
+    afterLabel: "Finished standing-seam metal",
   },
   {
     id: "highland-storm",
@@ -35,10 +35,10 @@ export const PROJECTS_DATA: ProjectItem[] = [
       "Hail fractured most of the ridge caps and compromised three skylight flashings, leaving slow ceiling stains.",
     resolution:
       "Rapid dry-in, replaced deck sheets, new metal skylight curbs, and heavyweight dimensional shingles.",
-    before: "hail",
-    after: "slate",
-    beforeLabel: "Hail-damaged shingle",
-    afterLabel: "Class-4 slate profile",
+    beforeImage: "p2Before",
+    afterImage: "p2After",
+    beforeLabel: "Storm-damaged roof assessed",
+    afterLabel: "New slate-profile roof",
   },
   {
     id: "cedar-crest-exterior",
@@ -54,9 +54,9 @@ export const PROJECTS_DATA: ProjectItem[] = [
       "Undersized 4-inch gutters and unvented eaves caused fascia rot and water spilling across the front entry.",
     resolution:
       "Rebuilt the eave geometry, fitted concealed-hanger 6-inch gutters, and wrapped the walls in barrier and new cladding.",
-    before: "dated",
-    after: "clad",
-    beforeLabel: "Aged roofline and eaves",
-    afterLabel: "Renewed roofline and cladding",
+    beforeImage: "p3Before",
+    afterImage: "p3After",
+    beforeLabel: "Aging roofline",
+    afterLabel: "New roofline installed",
   },
 ];
