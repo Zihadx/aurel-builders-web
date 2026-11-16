@@ -1,3 +1,4 @@
+// MOCK DATA: sample content, replace with your real business details.
 import { ProjectItem } from "@/types";
 
 /** Sample projects. Replace with real case studies and photography. */

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { AlertCircle, ArrowLeft, ArrowRight, Check, Loader2 } from "lucide-react";
@@ -69,7 +69,6 @@ export function BookingFlow() {
   const [dir, setDir] = useState(1);
   const [done, setDone] = useState<Done | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
-  const [days, setDays] = useState<string[]>([]);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   const {
@@ -77,7 +76,7 @@ export function BookingFlow() {
     handleSubmit,
     trigger,
     setValue,
-    watch,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<BookingValues>({
     resolver: zodResolver(bookingSchema),
@@ -96,18 +95,25 @@ export function BookingFlow() {
       website: "",
     },
   });
-  const v = watch();
+  const v = useWatch({ control }) as BookingValues;
 
-  // Next 4 weeks, Monday–Saturday, starting tomorrow (client-only: depends on today)
-  useEffect(() => {
+  // Next 4 weeks, Monday to Saturday, starting tomorrow. Built only in the
+  // browser (it depends on today's date), without an effect-driven setState.
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
+  const days = useMemo(() => {
+    if (!mounted) return [];
     const out: string[] = [];
-    const d = new Date();
+    const now = new Date();
     for (let i = 1; i <= 28; i++) {
-      const x = new Date(d.getFullYear(), d.getMonth(), d.getDate() + i);
-      if (x.getDay() !== 0) out.push(toYmd(x));
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+      if (d.getDay() !== 0) out.push(toYmd(d));
     }
-    setDays(out);
-  }, []);
+    return out;
+  }, [mounted]);
 
   // Move focus to the step heading whenever the step changes
   useEffect(() => {

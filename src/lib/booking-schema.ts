@@ -48,7 +48,7 @@ export const bookingSchema = z.object({
     .regex(/^[+()\d][\d\s().+-]{6,}$/, "Enter a phone number we can reach."),
   contactMethod: z.enum(BOOKING_CONTACT_METHODS),
   notes: z.string().trim().max(1000, "Please keep notes under 1,000 characters.").optional(),
-  website: z.string().max(0).optional(), // honeypot
+  website: z.string().max(200).optional(), // honeypot: real visitors never fill this; the handler fakes success
 });
 
 export type BookingValues = z.infer<typeof bookingSchema>;

@@ -20,6 +20,8 @@ export interface MaterialItem {
   underlayment: string;
   thermal: string;
   image: ImageKey;
+  /** MOCK installed price range per roofing square (100 sq ft), USD. */
+  priceSquare: [number, number];
 }
 
 export interface Standard {
@@ -57,7 +59,16 @@ export interface SiteConfig {
     sheetNote: string;
     parts: RoofPart[];
   };
+  /** MOCK: replace with real figures before launch. */
+  proof: {
+    rating: number;
+    reviewCount: number;
+    platform: string;
+    stats: Array<{ value: number; suffix?: string; prefix?: string; label: string; detail: string }>;
+  };
   assurances: Array<{ title: string; detail: string }>;
+  /** What the visitor gets from a free visit (contact section). */
+  included: string[];
   materials: {
     heading: string;
     intro: string;
@@ -87,6 +98,7 @@ export interface ServiceItem {
   description: string;
   includes: string[];
   timeline: string;
+  from: string;
   image: ImageKey;
   /** Value of the estimate form's "Service Required" select. */
   formValue:
@@ -117,6 +129,8 @@ export interface ProjectItem {
 
 export interface TestimonialItem {
   id: string;
+  rating: number;
+  date: string;
   name: string;
   location: string;
   service: string;

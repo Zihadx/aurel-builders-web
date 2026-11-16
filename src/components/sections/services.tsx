@@ -5,8 +5,8 @@ import { SERVICES_DATA } from "@/data/services";
 import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/data/images";
 import { PhotoFade } from "@/components/ui/photo-fade";
-import { WordsReveal } from "@/components/ui/motion";
 import { useEstimate } from "@/lib/estimate-context";
+import { SectionHeader } from "@/components/ui/section-header";
 import { cn } from "@/lib/utils";
 
 export function ServicesSection() {
@@ -17,13 +17,7 @@ export function ServicesSection() {
   return (
     <section id="services" aria-labelledby="services-title" className="section bg-chalk">
       <div className="wrap">
-        <div className="grid gap-6 lg:grid-cols-12 lg:gap-12">
-          <WordsReveal id="services-title" className="t-h2 lg:col-span-7" text={"Six services, one standard of work."} />
-          <p className="t-body text-lead lg:col-span-5 lg:pt-2">
-            From a single leak to a full tear-off, each job follows the same
-            process: inspect, document, scope, build, walk through.
-          </p>
-        </div>
+        <SectionHeader id="services-title" eyebrow="Services" title={"Six services, one standard of work."} intro={"From a single leak to a full tear-off, each job follows the same process: inspect, document, scope, build, walk through."} tone="light" />
 
         <div className="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-12 lg:gap-16">
           <ul className="border-t border-ink lg:col-span-6" role="list">
@@ -48,13 +42,10 @@ export function ServicesSection() {
                       </span>
                       <span className="t-meta mt-1 block text-lead">{s.summary}</span>
                     </span>
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "h-px w-8 shrink-0 origin-right bg-patina transition-transform duration-300 ease-[var(--ease-out)]",
-                        selected ? "scale-x-100" : "scale-x-0"
-                      )}
-                    />
+                    <span className="shrink-0 text-right">
+                      <span className={cn("block text-[0.9375rem] font-semibold transition-colors", selected ? "text-patina" : "text-ink")}>{s.from}</span>
+                      <span className="t-meta block text-lead">{s.timeline}</span>
+                    </span>
                   </button>
                 </li>
               );
@@ -77,9 +68,15 @@ export function ServicesSection() {
                 ))}
               </ul>
 
-              <dl className="mt-6 flex items-baseline gap-3 text-[0.9375rem]">
-                <dt className="text-lead">Typical timeline</dt>
-                <dd className="font-semibold">{active.timeline}</dd>
+              <dl className="mt-6 grid grid-cols-2 gap-6 text-[0.9375rem]">
+                <div>
+                  <dt className="text-lead">Starting at</dt>
+                  <dd className="mt-0.5 font-semibold">{active.from}</dd>
+                </div>
+                <div>
+                  <dt className="text-lead">Typical timeline</dt>
+                  <dd className="mt-0.5 font-semibold">{active.timeline}</dd>
+                </div>
               </dl>
 
               <div className="mt-8">

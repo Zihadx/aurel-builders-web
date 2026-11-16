@@ -26,6 +26,7 @@ export function Photo({ image, sizes, priority, className, imgClassName }: Photo
           fill
           sizes={sizes}
           priority={priority}
+          draggable={false}
           onError={() => setFailed(true)}
           className={cn("object-cover", imgClassName)}
         />

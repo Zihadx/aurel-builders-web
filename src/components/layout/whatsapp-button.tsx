@@ -17,7 +17,7 @@ export function WhatsAppButton() {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ delay: reduce ? 0 : 2.2, type: "spring", stiffness: 260, damping: 20 }}
       whileHover={reduce ? undefined : { scale: 1.04 }}
-      className="group fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-40 flex h-14 items-center gap-0 rounded-full bg-[#1d9e55] p-0 text-white shadow-[0_8px_30px_rgb(0_0_0/0.28)] transition-colors hover:bg-[#178a49] focus-visible:gap-2"
+      className="group fixed max-lg:hidden bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-40 flex h-14 items-center gap-0 rounded-full bg-[#1d9e55] p-0 text-white shadow-[0_8px_30px_rgb(0_0_0/0.28)] transition-colors hover:bg-[#178a49] focus-visible:gap-2"
     >
       <span className="grid h-14 w-14 shrink-0 place-items-center">
         <MessageCircle className="h-7 w-7" aria-hidden="true" />

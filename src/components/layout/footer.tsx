@@ -7,7 +7,7 @@ import { Logo } from "@/components/ui/logo";
 export function Footer() {
   const { contact, legalNote, shortName, companyName, tagline } = SITE_CONFIG;
   return (
-    <footer className="on-deep bg-deeper text-chalk">
+    <footer className="on-deep bg-deeper pb-20 text-chalk lg:pb-0">
       <div className="wrap grid gap-12 py-16 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <p className="flex items-center gap-2.5">

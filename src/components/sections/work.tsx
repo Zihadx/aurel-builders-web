@@ -4,8 +4,9 @@ import { useState } from "react";
 import { PROJECTS_DATA } from "@/data/projects";
 import { IMAGES } from "@/data/images";
 import { ImageComparison } from "@/components/ui/image-comparison";
-import { FadeUp, ImageReveal, WordsReveal } from "@/components/ui/motion";
+import { ImageReveal } from "@/components/ui/motion";
 import { Button } from "@/components/ui/button";
+import { SectionHeader } from "@/components/ui/section-header";
 import { cn } from "@/lib/utils";
 
 
@@ -16,14 +17,7 @@ export function WorkSection() {
   return (
     <section id="work" aria-labelledby="work-title" className="section on-deep bg-deep text-chalk">
       <div className="wrap">
-        <div className="grid gap-6 lg:grid-cols-12 lg:gap-12">
-          <WordsReveal id="work-title" className="t-h2 lg:col-span-7" text="Recent projects, start to finish." />
-          <FadeUp className="lg:col-span-5 lg:pt-2">
-            <p className="t-body text-mist">
-              Drag the divider across each project to see the roof before and after, with the problem we found, what we built and how long it took.
-            </p>
-          </FadeUp>
-        </div>
+        <SectionHeader id="work-title" eyebrow="Projects" title={"Recent projects, start to finish."} intro={"Drag the divider across each project to see the roof before and after, with the problem we found, what we built and how long it took."} tone="dark" />
 
         <div role="tablist" aria-label="Projects" className="mt-12 flex flex-wrap gap-x-8 gap-y-2 border-b border-rule-deep">
           {PROJECTS_DATA.map((p) => {

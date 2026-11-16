@@ -100,6 +100,14 @@ export function ContactSection() {
           <div className="lg:col-span-5">
             <WordsReveal id="contact-title" className="t-h2" text={contactSection.heading} />
             <p className="t-body mt-6 text-mist">{contactSection.intro}</p>
+            <ul className="mt-6 space-y-2.5">
+              {SITE_CONFIG.included.map((item) => (
+                <li key={item} className="flex gap-3 text-[0.9375rem]">
+                  <svg viewBox="0 0 16 16" className="mt-1 h-4 w-4 shrink-0 text-patina-hi" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5L13.5 4.5" /></svg>
+                  {item}
+                </li>
+              ))}
+            </ul>
 
             <dl className="mt-10 divide-y divide-rule-deep border-y border-rule-deep">
               <div className="py-5">

@@ -1,3 +1,4 @@
+// MOCK DATA: sample content, replace with your real business details.
 import { ServiceItem } from "@/types";
 
 export const SERVICES_DATA: ServiceItem[] = [
@@ -13,6 +14,7 @@ export const SERVICES_DATA: ServiceItem[] = [
       "Custom-fabricated 24-gauge drip edge and valley metal",
     ],
     timeline: "2–4 days",
+    from: "From $9,800",
     image: "serviceReplacement",
     formValue: "Roof Replacement",
   },
@@ -28,6 +30,7 @@ export const SERVICES_DATA: ServiceItem[] = [
       "Attic moisture tracing and airflow balancing",
     ],
     timeline: "Same day to 1 day",
+    from: "From $450",
     image: "serviceRepair",
     formValue: "Roof Repair",
   },
@@ -43,6 +46,7 @@ export const SERVICES_DATA: ServiceItem[] = [
       "Honest remaining-lifespan assessment",
     ],
     timeline: "60–90 minutes",
+    from: "Free",
     image: "serviceInspection",
     formValue: "Roof Inspection",
   },
@@ -58,6 +62,7 @@ export const SERVICES_DATA: ServiceItem[] = [
       "Class-4 impact-resistant system upgrades",
     ],
     timeline: "24–48 hour dispatch",
+    from: "Free assessment",
     image: "serviceStorm",
     formValue: "Storm Damage",
   },
@@ -73,6 +78,7 @@ export const SERVICES_DATA: ServiceItem[] = [
       "Debris-shedding micro-screen leaf protection",
     ],
     timeline: "1 day",
+    from: "From $1,400",
     image: "serviceGutter",
     formValue: "Gutter Installation",
   },
@@ -88,6 +94,7 @@ export const SERVICES_DATA: ServiceItem[] = [
       "Ventilated cedar or aluminum soffit assemblies",
     ],
     timeline: "4–8 days",
+    from: "From $6,500",
     image: "serviceSiding",
     formValue: "Siding & Exterior",
   },

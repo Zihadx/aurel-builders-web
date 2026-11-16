@@ -30,7 +30,7 @@ export const estimateSchema = z.object({
     .min(12, "Tell us a little more — at least a sentence.")
     .max(2000),
   // Honeypot: real visitors never see or fill this.
-  website: z.string().max(0).optional(),
+  website: z.string().max(200).optional(),
 });
 
 export type EstimateFormValues = z.infer<typeof estimateSchema>;

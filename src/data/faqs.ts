@@ -1,3 +1,4 @@
+// MOCK DATA: sample content, replace with your real business details.
 import { FaqItem } from "@/types";
 
 export const FAQS_DATA: FaqItem[] = [

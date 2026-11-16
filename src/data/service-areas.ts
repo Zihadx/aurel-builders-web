@@ -1,3 +1,4 @@
+// MOCK DATA: sample content, replace with your real business details.
 import { ServiceAreaRegion } from "@/types";
 
 /** Sample coverage regions. x/y are positions on the schematic map (0–100). */

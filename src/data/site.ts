@@ -61,6 +61,24 @@ export const SITE_CONFIG: SiteConfig = {
       },
     ],
   },
+  // MOCK DATA: every figure below is sample content for layout and tone.
+  proof: {
+    rating: 4.9,
+    reviewCount: 612,
+    platform: "Google",
+    stats: [
+      { value: 2140, suffix: "+", label: "Roofs completed", detail: "Across four service regions since 2004" },
+      { value: 22, label: "Years in business", detail: "Family-owned and locally managed" },
+      { value: 25, suffix: "-year", label: "Workmanship warranty", detail: "In writing, on every replacement" },
+      { value: 98, suffix: "%", label: "Finished on schedule", detail: "Of jobs in the last 12 months" },
+    ],
+  },
+  included: [
+    "A free 45-point inspection with annotated photos",
+    "A written, line-by-line scope you can compare",
+    "Help documenting storm damage for your insurer",
+    "Financing options explained before you decide",
+  ],
   assurances: [
     { title: "Licensed and insured", detail: "Coverage details are listed on every proposal." },
     { title: "Free inspection", detail: "45 points, annotated photos, no obligation." },
@@ -83,6 +101,7 @@ export const SITE_CONFIG: SiteConfig = {
         underlayment: "High-temperature ice and water shield",
         thermal: "Solar-reflective cool-roof finish",
         image: "materialMetal",
+        priceSquare: [1150, 1650],
       },
       {
         id: "slate",
@@ -93,6 +112,7 @@ export const SITE_CONFIG: SiteConfig = {
         underlayment: "Double-layer synthetic",
         thermal: "High thermal mass buffers temperature swings",
         image: "materialSlate",
+        priceSquare: [1600, 2400],
       },
       {
         id: "shingle",
@@ -103,6 +123,7 @@ export const SITE_CONFIG: SiteConfig = {
         underlayment: "Breathable synthetic plus valley ice shield",
         thermal: "Balanced ridge and soffit airflow",
         image: "materialShingle",
+        priceSquare: [480, 780],
       },
     ],
   },

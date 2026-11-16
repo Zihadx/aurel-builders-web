@@ -1,51 +1,59 @@
 # AUREL Roofing Co.
 
-Marketing site for a (fictional) residential roofing contractor. Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, three.js, Motion, Lenis, React Hook Form + Zod.
+Marketing and booking site for a residential roofing contractor. Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, three.js, Motion, Lenis, React Hook Form + Zod.
 
-## Design direction
+AUREL is a fictional brand. **All figures, reviews, prices and locations are mock data** so the site reads like a real business while you build. Every mock value lives in `src/data/` (search the repo for `MOCK`) and is meant to be replaced.
 
-Dark, photographic and tactile. The hero is a real-time 3D roof model (three.js): physically based metal, plywood, plaster and glass, soft shadows, drag-to-orbit, and a layer-by-layer "take it apart" mode driven by the list beside it. It assembles itself on load. Below it, sections use real photography, word-by-word headline reveals, image clip-reveals, scroll parallax and inertial smooth scrolling (Lenis). All motion respects `prefers-reduced-motion`.
-
-Palette: zinc paper, slate, one patina-green accent. Type: Archivo (headings/UI) and Newsreader (reading text), self-hosted. Tokens live in `src/app/globals.css`.
-
-## 3D model
-
-`src/components/graphics/roof-scene.tsx` builds the whole scene procedurally (no model files to download). The model loads client-side only, pauses when off-screen, and falls back to a photo if WebGL is unavailable. The mouse wheel is not captured, so page scrolling is never hijacked.
-
-## Photography
-
-All photos are hot-linked from Unsplash roofing results and listed in one place: `src/data/images.ts` (project before/after pairs are `p1Before`, `p1After`, and so on). Replace any URL with your own photography. A tonal placeholder shows if an image fails to load.
-
-## Commands
+## Quick start
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
-npm run typecheck
-npm run lint
-npm run build && npm start
+cp .env.example .env.local     # then edit
+npm run dev                    # http://localhost:3000
+npm run check                  # typecheck + lint + production build
+npm start                      # after a build
 ```
 
-## Editing content
+Requires Node 20.9 or newer.
 
-- Brand copy, hero callouts, materials, approach, process: `src/data/site.ts`
-- Services: `src/data/services.ts` · Projects: `src/data/projects.ts` · Reviews: `src/data/testimonials.ts`
-- Service regions: `src/data/service-areas.ts` · FAQ: `src/data/faqs.ts`
+## What's where
 
-All figures, locations and reviews are sample content. Swap in real project photography in `src/data/images.ts`.
+| Path | What it holds |
+| --- | --- |
+| `src/data/site.ts` | Brand copy, hero parts, materials (with MOCK prices), proof stats, process, contact details |
+| `src/data/services.ts`, `projects.ts`, `testimonials.ts`, `faqs.ts`, `service-areas.ts` | Section content |
+| `src/data/images.ts` | Every photo URL (Unsplash, hot-linked). Replace with your own photography |
+| `src/components/sections/` | One file per page section |
+| `src/components/graphics/` | The 3D roof (three.js, lazy-loaded, WebGL fallback) |
+| `src/components/booking/` | The five-step booking flow at `/book` |
+| `src/server/` | API hardening: env validation, rate limiter, lead handler |
+| `src/app/globals.css` | Design tokens (colour, type scale, motion) |
 
-## Booking (`/book`)
+## Before you go live
 
-A five-step inspection booking flow: service, property, day and time window, contact details, review. Validated in the browser and again at `/api/booking` (shared Zod schema in `src/lib/booking-schema.ts`). Visitors can download a calendar file (.ics) and confirm on WhatsApp after booking. Time windows are *requested*, not guaranteed, and the page says so; there is no live availability backend.
+1. **Replace mock data** in `src/data/`. Update the phone, email, address and WhatsApp number (`NEXT_PUBLIC_WHATSAPP_NUMBER`).
+2. **Set `LEAD_WEBHOOK_URL`** (https only) so estimate requests and bookings go somewhere. Until then the forms validate and tell visitors honestly that nothing was sent. Add `LEAD_WEBHOOK_SECRET` to sign every request with `X-Aurel-Signature: sha256=<hmac>`.
+3. **Set `NEXT_PUBLIC_SITE_URL`** to your real domain (canonical links, sitemap, social card).
+4. **Swap the photos** in `src/data/images.ts`, and keep the alt text specific.
+5. If you enable review stars in search results, only do so with real, verifiable reviews.
 
-## WhatsApp
+## Security
 
-A floating WhatsApp button appears on every page, with the same link in the menu, contact section and booking confirmation. Set `NEXT_PUBLIC_WHATSAPP_NUMBER` (digits only, international format) and edit the greeting in `src/data/site.ts`. The shipped number is a placeholder.
+- **Headers:** a strict Content-Security-Policy, HSTS, `X-Frame-Options: DENY`, `nosniff`, a tight Referrer-Policy and Permissions-Policy. The CSP allows inline scripts because Next.js emits small inline bootstrap scripts; move to nonce-based CSP via middleware if you need stricter, at the cost of making pages dynamic.
+- **Forms (`/api/estimate`, `/api/booking`):** same-origin check, JSON-only, 8 KB body cap, per-IP rate limit (8 per 10 minutes), server-side Zod validation, a silent honeypot, and no personal data in logs.
+- **Rate limiter** is in-memory, so it is per server instance. On serverless or multiple instances, replace `src/server/rate-limit.ts` with Redis/Upstash (same function signature).
+- **Webhook:** https only, private and local addresses rejected, no redirects followed, 8 s timeout, optional HMAC signing.
+- **Images:** the optimizer only accepts `images.unsplash.com/photo-*`.
+- Structured data is serialised with `<` escaped, so content can never break out of the script tag.
 
-## Estimate form
+## Performance and accessibility
 
-The form validates in the browser and again on the server (`src/lib/estimate-schema.ts`, shared) and posts to `/api/estimate`. Set `LEAD_WEBHOOK_URL` (see `.env.example`) to forward estimate requests and bookings (tagged `type: "estimate"` or `"booking"`) to your CRM, Zapier/Make, or an email relay. With no webhook set, the form tells the visitor nothing was sent instead of pretending it was.
+- The 3D engine (~590 KB) loads only for the hero and only on the client; the page falls back to a photo without WebGL. It pauses when off-screen.
+- Fonts are self-hosted (`src/fonts`, SIL OFL), images are optimised (AVIF/WebP) and sized per viewport.
+- All motion respects `prefers-reduced-motion`. Keyboard navigation, visible focus, labelled form fields and live error messages throughout; automated axe scans report no violations on the home and booking pages.
 
-## Fonts
+## Editing tips
 
-Archivo and Newsreader are self-hosted from `src/fonts` (SIL OFL licenses included), so builds work offline and no requests go to Google.
+- Colours, type and spacing: tokens at the top of `src/app/globals.css`.
+- Section headers share one component (`ui/section-header.tsx`), so alignment stays consistent when you add sections.
+- Booking time windows and services: `src/lib/booking-schema.ts`.

@@ -1,8 +1,8 @@
 "use client";
 
-import { WordsReveal } from "@/components/ui/motion";
 import { useState } from "react";
 import { SERVICE_AREAS_DATA } from "@/data/service-areas";
+import { SectionHeader } from "@/components/ui/section-header";
 import { cn } from "@/lib/utils";
 
 export function ServiceAreasSection() {
@@ -12,13 +12,7 @@ export function ServiceAreasSection() {
   return (
     <section id="areas" aria-labelledby="areas-title" className="section bg-chalk">
       <div className="wrap">
-        <div className="grid gap-6 lg:grid-cols-12 lg:gap-12">
-          <WordsReveal id="areas-title" className="t-h2 lg:col-span-7" text={"Where we work, and how quickly we get there."} />
-          <p className="t-body text-lead lg:col-span-5 lg:pt-2">
-            Choose a region to see typical inspection response times and the
-            neighborhoods we cover.
-          </p>
-        </div>
+        <SectionHeader id="areas-title" eyebrow="Service areas" title={"Where we work, and how quickly we get there."} intro={"Choose a region to see typical inspection response times and the neighborhoods we cover."} tone="light" />
 
         <div className="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-12 lg:gap-16">
           {/* Schematic map */}

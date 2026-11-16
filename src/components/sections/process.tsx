@@ -1,8 +1,8 @@
 "use client";
 
-import { WordsReveal } from "@/components/ui/motion";
 import { SITE_CONFIG } from "@/data/site";
 import { useInView } from "@/hooks/use-in-view";
+import { SectionHeader } from "@/components/ui/section-header";
 import { cn } from "@/lib/utils";
 
 /** The one genuinely sequential piece of content, so it is the one numbered
@@ -14,10 +14,7 @@ export function ProcessSection() {
   return (
     <section id="process" aria-labelledby="process-title" className="section bg-chalk">
       <div className="wrap">
-        <div className="grid gap-6 lg:grid-cols-12 lg:gap-12">
-          <WordsReveal id="process-title" className="t-h2 lg:col-span-7" text={process.heading} />
-          <p className="t-body text-lead lg:col-span-5 lg:pt-2">{process.intro}</p>
-        </div>
+        <SectionHeader id="process-title" eyebrow="How it works" title={process.heading} intro={process.intro} tone="light" />
 
         <ol ref={ref} className="relative mt-14 grid gap-10 lg:mt-20 lg:grid-cols-4 lg:gap-8">
           <span

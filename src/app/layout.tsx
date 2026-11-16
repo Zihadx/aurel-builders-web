@@ -2,7 +2,10 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SITE_CONFIG } from "@/data/site";
+import { SITE_URL } from "@/lib/site-url";
+import { jsonLd, localBusinessLd } from "@/lib/seo";
 import { EstimateProvider } from "@/lib/estimate-context";
+import { MobileActionBar } from "@/components/layout/mobile-action-bar";
 import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
 
@@ -20,15 +23,16 @@ const newsreader = localFont({
   display: "swap",
 });
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurelroofing.example.com";
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: `${SITE_CONFIG.companyName} — Roof replacement, repair and inspection`,
   description:
     "Residential roofing done layer by layer: photographed inspections, itemized written scopes, standing-seam metal, slate and Class-4 shingle systems.",
+  applicationName: SITE_CONFIG.companyName,
   alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
+  formatDetection: { telephone: true, email: false, address: false },
+  twitter: { card: "summary_large_image" },
   openGraph: {
     title: `${SITE_CONFIG.companyName} — A roof is a system`,
     description:
@@ -49,28 +53,12 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "RoofingContractor",
-    name: SITE_CONFIG.companyName,
-    description: SITE_CONFIG.tagline,
-    url: SITE_URL,
-    telephone: SITE_CONFIG.contact.phoneDisplay,
-    email: SITE_CONFIG.contact.email,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: SITE_CONFIG.contact.headquartersSample,
-      addressCountry: "US",
-    },
-    openingHours: SITE_CONFIG.contact.officeHours,
-  };
-
   return (
     <html lang="en" className={`${archivo.variable} ${newsreader.variable}`}>
       <body>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(localBusinessLd()) }}
         />
         <a
           href="#main"
@@ -82,6 +70,7 @@ export default function RootLayout({
           <EstimateProvider>{children}</EstimateProvider>
           <aside aria-label="Quick contact">
             <WhatsAppButton />
+            <MobileActionBar />
           </aside>
         </SmoothScroll>
       </body>
