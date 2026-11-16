@@ -6,5 +6,6 @@ export const NAVIGATION_LINKS: NavItem[] = [
   { label: "Approach", href: "#approach" },
   { label: "Projects", href: "#work" },
   { label: "Reviews", href: "#reviews" },
+  { label: "Journal", href: "/journal" },
   { label: "Contact", href: "#contact" },
 ];

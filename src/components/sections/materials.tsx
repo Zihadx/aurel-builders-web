@@ -44,7 +44,7 @@ export function MaterialsSection() {
   };
 
   return (
-    <section id="materials" aria-labelledby="materials-title" className="section on-deep bg-deep text-chalk">
+    <section id="materials" aria-labelledby="materials-title" className="section on-deep grain bg-deep text-chalk">
       <div className="wrap">
         <SectionHeader id="materials-title" eyebrow="Materials and pricing" title={materials.heading} intro={"Each material has its own fastening rules, underlayment and ventilation needs. Pick one, size your roof, and see a typical installed price range straight away."} tone="dark" />
 

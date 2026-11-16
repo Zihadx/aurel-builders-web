@@ -18,7 +18,7 @@ export function HeroSection() {
     <section
       id="home"
       aria-labelledby="hero-title"
-      className="on-deep relative isolate -mt-16 overflow-hidden bg-deeper text-chalk lg:-mt-[4.5rem]"
+      className="on-deep grain relative isolate -mt-16 overflow-hidden bg-deeper text-chalk lg:-mt-[4.5rem]"
     >
       {/* Photograph, graded into the palette and drifting slowly on scroll */}
       <div aria-hidden="true" className="absolute inset-0 -z-10">

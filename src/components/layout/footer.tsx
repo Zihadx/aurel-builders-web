@@ -28,7 +28,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5 text-[0.9375rem]">
               {NAVIGATION_LINKS.map((l) => (
                 <li key={l.href}>
-                  <Link href={`/${l.href}`} className="hover:text-patina-hi">{l.label}</Link>
+                  <Link href={l.href.startsWith("/") ? l.href : `/${l.href}`} className="hover:text-patina-hi">{l.label}</Link>
                 </li>
               ))}
               <li>

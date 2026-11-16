@@ -89,7 +89,7 @@ export function ContactSection() {
     <section
       id="contact"
       aria-labelledby="contact-title"
-      className="pitch-top on-deep relative isolate bg-deep text-chalk"
+      className="pitch-top on-deep grain relative isolate bg-deep text-chalk"
     >
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <Photo image={IMAGES.cta} sizes="100vw" className="h-full w-full" imgClassName="opacity-25 saturate-[0.6]" />

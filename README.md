@@ -23,11 +23,17 @@ Requires Node 20.9 or newer.
 | `src/data/site.ts` | Brand copy, hero parts, materials (with MOCK prices), proof stats, process, contact details |
 | `src/data/services.ts`, `projects.ts`, `testimonials.ts`, `faqs.ts`, `service-areas.ts` | Section content |
 | `src/data/images.ts` | Every photo URL (Unsplash, hot-linked). Replace with your own photography |
+| `src/data/inspection.ts`, `health-check.ts`, `care-plans.ts`, `team.ts`, `journal.ts` | Content for the 45-point inspection, roof quiz and scoring, care plans, team, and Journal articles |
 | `src/components/sections/` | One file per page section |
 | `src/components/graphics/` | The 3D roof (three.js, lazy-loaded, WebGL fallback) |
 | `src/components/booking/` | The five-step booking flow at `/book` |
+| `src/app/journal/` | Journal index and article pages (statically generated, with Article structured data) |
 | `src/server/` | API hardening: env validation, rate limiter, lead handler |
 | `src/app/globals.css` | Design tokens (colour, type scale, motion) |
+
+## Page journey
+
+Hero (3D roof) → proof → services with starting prices → materials with a live price range → approach → the 45-point inspection → process → before/after projects → **Roof Health Check** (interactive quiz that pre-fills the booking) → reviews → team → **Care plans** → service areas → Journal → FAQ → contact. A sticky action bar (Call, WhatsApp, Book) follows phone visitors.
 
 ## Before you go live
 

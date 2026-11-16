@@ -9,9 +9,11 @@ import { SITE_CONFIG } from "@/data/site";
 import { SERVICES_DATA } from "@/data/services";
 import { Button } from "@/components/ui/button";
 import { whatsappUrl } from "@/lib/whatsapp";
+import { useEstimate } from "@/lib/estimate-context";
 import { cn } from "@/lib/utils";
 import {
   BOOKING_CONTACT_METHODS,
+  BOOKING_SERVICES,
   PROPERTY_TYPES,
   ROOF_AGES,
   STEP_FIELDS,
@@ -65,6 +67,7 @@ function buildIcs(v: BookingValues, reference: string) {
 
 export function BookingFlow() {
   const reduce = useReducedMotion();
+  const { service: presetService, scope: presetScope } = useEstimate();
   const [step, setStep] = useState(0);
   const [dir, setDir] = useState(1);
   const [done, setDone] = useState<Done | null>(null);
@@ -82,7 +85,7 @@ export function BookingFlow() {
     resolver: zodResolver(bookingSchema),
     mode: "onTouched",
     defaultValues: {
-      service: "Roof Inspection",
+      service: (BOOKING_SERVICES as readonly string[]).includes(presetService ?? "") ? (presetService as BookingValues["service"]) : "Roof Inspection",
       propertyType: "Single-family home",
       roofAge: "Not sure",
       contactMethod: "Phone Call",
@@ -91,7 +94,7 @@ export function BookingFlow() {
       fullName: "",
       email: "",
       phone: "",
-      notes: "",
+      notes: presetScope?.slice(0, 900) ?? "",
       website: "",
     },
   });

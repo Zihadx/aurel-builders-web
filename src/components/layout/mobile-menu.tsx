@@ -83,10 +83,10 @@ export function MobileMenu({ isOpen, onClose, onHome }: Props) {
           {NAVIGATION_LINKS.map((link) => (
             <li key={link.href}>
               <Link
-                href={onHome ? link.href : `/${link.href}`}
+                href={link.href.startsWith("/") || onHome ? link.href : `/${link.href}`}
                 onClick={(e) => {
                   onClose();
-                  if (onHome) {
+                  if (onHome && link.href.startsWith("#")) {
                     e.preventDefault();
                     setTimeout(() => scrollToSection(link.href), 60);
                   }

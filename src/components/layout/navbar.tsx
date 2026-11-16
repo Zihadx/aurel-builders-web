@@ -12,7 +12,7 @@ import { MobileMenu } from "@/components/layout/mobile-menu";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { cn, scrollToSection } from "@/lib/utils";
 
-const IDS = NAVIGATION_LINKS.map((l) => l.href.slice(1));
+const IDS = NAVIGATION_LINKS.filter((l) => l.href.startsWith("#")).map((l) => l.href.slice(1));
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -58,14 +58,14 @@ export function Navbar() {
           <nav aria-label="Primary" className="hidden lg:block">
             <ul className="flex items-center gap-8">
               {NAVIGATION_LINKS.map((link) => {
-                const isActive = active === link.href.slice(1);
+                const isActive = link.href.startsWith("#") && active === link.href.slice(1);
                 return (
                   <li key={link.href}>
                     <Link
-                      href={onHome ? link.href : `/${link.href}`}
+                      href={link.href.startsWith("/") || onHome ? link.href : `/${link.href}`}
                       aria-current={isActive ? "true" : undefined}
                       onClick={(e) => {
-                        if (onHome) {
+                        if (onHome && link.href.startsWith("#")) {
                           e.preventDefault();
                           scrollToSection(link.href);
                         }

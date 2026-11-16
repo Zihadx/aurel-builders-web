@@ -5,6 +5,7 @@ import { SITE_CONFIG } from "@/data/site";
 import { SITE_URL } from "@/lib/site-url";
 import { jsonLd, localBusinessLd } from "@/lib/seo";
 import { EstimateProvider } from "@/lib/estimate-context";
+import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { MobileActionBar } from "@/components/layout/mobile-action-bar";
 import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
@@ -60,6 +61,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLd(localBusinessLd()) }}
         />
+        <ScrollProgress />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink focus:px-4 focus:py-2 focus:text-chalk"

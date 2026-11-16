@@ -15,7 +15,7 @@ export function WorkSection() {
   const project = PROJECTS_DATA.find((p) => p.id === activeId) ?? PROJECTS_DATA[0];
 
   return (
-    <section id="work" aria-labelledby="work-title" className="section on-deep bg-deep text-chalk">
+    <section id="work" aria-labelledby="work-title" className="section on-deep grain bg-deep text-chalk">
       <div className="wrap">
         <SectionHeader id="work-title" eyebrow="Projects" title={"Recent projects, start to finish."} intro={"Drag the divider across each project to see the roof before and after, with the problem we found, what we built and how long it took."} tone="dark" />
 
