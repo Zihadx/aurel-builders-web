@@ -30,7 +30,7 @@ export function RoofViewer({ activeId, onSelect }: Props) {
   }
   return (
     <div
-      className="h-full w-full [mask-image:radial-gradient(ellipse_72%_72%_at_50%_52%,#000_58%,transparent_100%)]"
+      className="h-full w-full roof-mask"
       role="group"
       aria-label="Interactive 3D model of a roof. Drag to rotate. Use the list to focus on each layer."
     >

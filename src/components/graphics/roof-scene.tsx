@@ -24,13 +24,23 @@ const THETA = Math.atan(7 / 12);
 const RIDGE_Y = EAVE_Y + HALF_RUN * Math.tan(THETA);
 const SLOPE_LEN = HALF_RUN / Math.cos(THETA);
 
-const FOCUS: Record<PartId, { pos: [number, number, number]; target: [number, number, number]; explode: number }> = {
-  ridge: { pos: [6.5, 9.5, 12], target: [0, 4.6, 0], explode: 0 },
-  panel: { pos: [12, 9.6, 14], target: [1.4, 3.7, 1.2], explode: 0.55 },
-  deck: { pos: [12.5, 7.4, 12.5], target: [2.2, 3.1, 1.6], explode: 0.55 },
-  eave: { pos: [-3.5, 4.6, 14.5], target: [-2.2, 2.6, 3.8], explode: 0 },
+/** Each view: where the camera looks from (direction only), what it looks at,
+ *  and the radius of the region that must stay fully in frame. The camera
+ *  distance is derived from the radius and the canvas shape, so the model is
+ *  never cut off on any screen. */
+interface View {
+  dir: [number, number, number];
+  target: [number, number, number];
+  radius: number;
+  explode: number;
+}
+const FOCUS: Record<PartId, View> = {
+  ridge: { dir: [6.5, 4.9, 12], target: [0, 4.6, 0], radius: 4.8, explode: 0 },
+  panel: { dir: [10.6, 5.9, 12.8], target: [1.4, 3.7, 1.2], radius: 6.2, explode: 0.55 },
+  deck: { dir: [10.3, 4.3, 10.9], target: [2.2, 3.1, 1.6], radius: 6, explode: 0.55 },
+  eave: { dir: [-1.3, 2.2, 10.7], target: [-2.2, 2.6, 3.8], radius: 4.6, explode: 0 },
 };
-const HOME = { pos: [14.2, 9.4, 16] as [number, number, number], target: [0, 1.3, 0] as [number, number, number] };
+const HOME: View = { dir: [14.2, 8.1, 16], target: [0, 1.3, 0], radius: 8.2, explode: 0 };
 
 interface Item {
   mesh: THREE.Mesh;
@@ -120,10 +130,17 @@ export default function RoofScene({ activeId, onSelect, onFail }: Props) {
     scene.environmentIntensity = 0.9;
 
     const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-    camera.position.set(...HOME.pos);
 
     const controls = new OrbitControls(camera, canvas);
     controls.target.set(...HOME.target);
+    const fitDist = (r: number) => {
+      const halfV = THREE.MathUtils.degToRad(camera.fov) / 2;
+      const halfH = Math.atan(Math.tan(halfV) * camera.aspect);
+      return (r / Math.sin(Math.min(halfV, halfH))) * 1.05;
+    };
+    const viewPos = (v: View, out: THREE.Vector3) =>
+      out.set(...v.dir).normalize().multiplyScalar(fitDist(v.radius)).add(tmpT.set(...v.target));
+    const tmpT = new THREE.Vector3();
     controls.enableDamping = true;
     controls.dampingFactor = 0.07;
     controls.enablePan = false;
@@ -131,7 +148,7 @@ export default function RoofScene({ activeId, onSelect, onFail }: Props) {
     controls.minPolarAngle = 0.35;
     controls.maxPolarAngle = Math.PI / 2 - 0.06;
     controls.rotateSpeed = 0.7;
-    controls.update();
+    /* camera is placed after the first resize, once the canvas shape is known */
 
     /* ---------------- lights ---------------- */
     const key = new THREE.DirectionalLight(0xfff2e0, 2.1);
@@ -353,6 +370,7 @@ export default function RoofScene({ activeId, onSelect, onFail }: Props) {
     let idle = !reduce;
     let following = false;
     let lastFocus = 0;
+    let userMoved = false;
 
     const pick = (e: PointerEvent): PartId | null => {
       const r = canvas.getBoundingClientRect();
@@ -386,6 +404,7 @@ export default function RoofScene({ activeId, onSelect, onFail }: Props) {
     controls.addEventListener("start", () => {
       idle = false;
       following = false;
+      userMoved = true;
     });
 
     /* ---------------- sizing ---------------- */
@@ -398,6 +417,12 @@ export default function RoofScene({ activeId, onSelect, onFail }: Props) {
       // keep the whole house in frame on narrow viewports
       camera.fov = w / h < 1 ? 46 : 32;
       camera.updateProjectionMatrix();
+      // until the visitor takes over, keep the whole house framed for this shape
+      if (!engagedRef.current && !userMoved) {
+        const dir = camera.position.lengthSq() > 0 ? camera.position.clone().sub(controls.target).normalize() : new THREE.Vector3(...HOME.dir).normalize();
+        camera.position.copy(controls.target).addScaledVector(dir, fitDist(HOME.radius));
+        controls.update();
+      }
     };
     const ro = new ResizeObserver(resize);
     ro.observe(host);
@@ -434,8 +459,9 @@ export default function RoofScene({ activeId, onSelect, onFail }: Props) {
       const f = FOCUS[act];
 
       if (following) {
-        desired.set(...(engaged ? f.pos : HOME.pos));
-        desiredT.set(...(engaged ? f.target : HOME.target));
+        const view = engaged ? f : HOME;
+        viewPos(view, desired);
+        desiredT.set(...view.target);
         camera.position.x = THREE.MathUtils.damp(camera.position.x, desired.x, lam, dt);
         camera.position.y = THREE.MathUtils.damp(camera.position.y, desired.y, lam, dt);
         camera.position.z = THREE.MathUtils.damp(camera.position.z, desired.z, lam, dt);

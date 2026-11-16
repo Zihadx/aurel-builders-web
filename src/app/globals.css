@@ -260,3 +260,9 @@ input[type="range"].range::-moz-range-thumb {
   .draw { stroke-dashoffset: 0; }
   .settle { opacity: 1; }
 }
+
+/* Fades the 3D canvas into the page so its edges never show as a box */
+.roof-mask {
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 76%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 76%, transparent 100%);
+}
