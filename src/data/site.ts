@@ -1,281 +1,175 @@
 import { SiteConfig } from "@/types";
 
+/**
+ * Single source of truth for brand copy. AUREL Roofing Co. is a fictional
+ * showcase brand: figures, locations and contact details are placeholders to
+ * replace before launch. Nothing here claims a number the business has not
+ * supplied.
+ */
 export const SITE_CONFIG: SiteConfig = {
   companyName: "AUREL Roofing Co.",
   shortName: "AUREL",
-  tagline: "Architectural Roofing & Exterior Protection Systems",
+  tagline: "Residential roof replacement, repair and inspection",
   announcement: {
-    badge: "Autumn & Winter Storm Readiness",
-    text: "Protect your home before the next storm — complimentary 45-point architectural roof inspections now booking.",
-    ctaLabel: "Reserve an Inspection Window",
+    text: "Free 45-point roof inspections are booking for storm season.",
+    ctaLabel: "Book an inspection",
     ctaHref: "#contact",
   },
   contact: {
     phoneDisplay: "(800) 555-0194",
     phoneHref: "tel:+18005550194",
     email: "concierge@aurelroofing.example.com",
-    officeHours: "Mon – Sat: 7:30 AM – 6:30 PM",
-    emergencyNote: "24/7 Priority Tarping & Storm Assessment Dispatch (Sample)",
-    headquartersSample: "480 Architectural Way, Suite 210 — Sample Showcase Address",
+    officeHours: "Mon–Sat, 7:30 am – 6:30 pm",
+    emergencyNote: "Storm tarping and emergency assessment dispatch",
+    headquartersSample: "480 Architectural Way, Suite 210 (sample address)",
+    // International format, digits only (sample number: replace before launch)
+    whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "18005550194",
+    whatsappMessage: "Hi AUREL, I’d like to book a free roof inspection.",
   },
   hero: {
-    eyebrow: "Architectural Roofing & Exterior Stewardship",
-    headlineLines: ["Built to Protect.", "Designed to Last."],
-    accentWord: "Designed to Last.",
+    headline: "A roof is a system. We build every layer of it.",
     subheadline:
-      "Premium roofing and exterior solutions, delivered with quiet precision, honest guidance, and architectural craftsmanship that stands the test of time.",
-    primaryCta: "Get Your Free Estimate",
-    secondaryCta: "Explore Our Work",
-    trustIndicator: "Roofing professionals. Quality materials. Work built to last.",
-    floatingCard: {
-      title: "Your Home Deserves Better Protection",
-      subtitle:
-        "Hand-soldered valleys, breathable synthetic deck armor & Class-4 impact resistance.",
-      metricValue: "45pt",
-      metricLabel: "Complimentary visual & attic assessment",
-    },
-    hotspots: [
+      "AUREL replaces, repairs and inspects residential roofs. Every job starts with a photographed inspection and an itemized written scope, before any work begins.",
+    primaryCta: "Book a free inspection",
+    secondaryCta: "See recent projects",
+    sheetTitle: "Section A–A: standing-seam roof assembly",
+    sheetNote: "Not to scale",
+    parts: [
       {
-        id: "hotspot-01",
-        topPercent: "24%",
-        leftPercent: "44%",
-        shortPinLabel: "01 · Baffled Ridge Vent",
-        tag: "ACTIVE NODE 01 // PEAK THERMAL EXHAUST",
-        title: "Continuous Storm-Baffled Ridge Ventilation",
+        id: "ridge",
+        title: "Ridge ventilation",
         description:
-          "Balances attic intake-to-exhaust airflow across the highest roof spine, preventing summer super-heating and winter condensation rot.",
+          "A continuous, storm-baffled vent at the highest point lets attic air escape, so summer heat and winter condensation don’t build up under the roof.",
       },
       {
-        id: "hotspot-02",
-        topPercent: "38%",
-        leftPercent: "64%",
-        shortPinLabel: "02 · 24-Ga Kynar Seam",
-        tag: "ACTIVE NODE 02 // PRIMARY STRUCTURAL ENVELOPE",
-        title: "24-Gauge Kynar 500® Standing-Seam & Valley Armor",
+        id: "panel",
+        title: "Standing-seam panels and ice barrier",
         description:
-          "Concealed-clip expansion seams paired with high-temperature peel-and-stick ice barrier membrane for zero-penetration waterproofing.",
+          "24-gauge panels with concealed clips sit over a peel-and-stick ice barrier. There are no exposed fasteners where water could find a way in.",
       },
       {
-        id: "hotspot-03",
-        topPercent: "52%",
-        leftPercent: "31%",
-        shortPinLabel: "03 · Eave & Box Drainage",
-        tag: "ACTIVE NODE 03 // PERIMETER HYDROLOGIC DISCHARGE",
-        title: "Custom 6-Inch Seamless Box Gutter & Drip Edge",
+        id: "deck",
+        title: "Deck and underlayment",
         description:
-          "Heavy-gauge concealed structural hangers spaced at 24 inches route torrential roof runoff safely away from fascia and foundation walls.",
+          "We inspect the deck before covering it. Damaged boards are replaced, then breathable synthetic underlayment goes down before any panel.",
+      },
+      {
+        id: "eave",
+        title: "Eave and seamless gutter",
+        description:
+          "A 6-inch seamless gutter on concealed hangers every 24 inches carries runoff away from the fascia and the foundation.",
       },
     ],
   },
-  marqueeSpecs: [
-    "UL-2218 CLASS-4 IMPACT RESISTANCE",
-    "24-GAUGE KYNAR 500® STANDING-SEAM METAL",
-    "HAND-SOLDERED COPPER VALLEY FLASHING",
-    "HIGH-TEMP PEEL & STICK ICE BARRIER MEMBRANE",
-    "DRONE THERMAL & ATTIC MOISTURE DIAGNOSTICS",
-    "MAGNETIC LAWN SWEEP & ESTATE TARPING PROTOCOL",
+  assurances: [
+    { title: "Licensed and insured", detail: "Coverage details are listed on every proposal." },
+    { title: "Free inspection", detail: "45 points, annotated photos, no obligation." },
+    { title: "Itemized written scope", detail: "Priced by layer, before work begins." },
+    { title: "Written warranty", detail: "Material and workmanship terms in the proposal." },
+    { title: "Clean site", detail: "Landscaping protected, grounds magnet-swept daily." },
   ],
-  materialStudio: [
-    {
-      id: "standing-seam",
-      badge: "01 // Architectural Standing-Seam System (Sample Spec)",
-      title: "24-Gauge Standing-Seam Metal",
-      subtitle: "Concealed fastener architectural Kynar 500® finish",
-      lifespanBadge: "50+ Yrs",
-      imageKey: "project1After",
-      windRating: "Up to 140 MPH / Class-4",
-      underlaymentSpec: "High-Temp Ice & Water Shield",
-      thermalSpec: "Cool-Roof Solar Reflective",
-    },
-    {
-      id: "quarry-slate",
-      badge: "02 // Natural & Composite Quarry Slate (Sample Spec)",
-      title: "Natural & Composite Quarry Slate",
-      subtitle: "Hand-split dimensional stone profile with copper flashing",
-      lifespanBadge: "75–100 Yrs",
-      imageKey: "project2After",
-      windRating: "Up to 130 MPH / Class-4 Fire & Hail",
-      underlaymentSpec: "Double-Layer Synthetic Deck Armor",
-      thermalSpec: "High-Mass Natural Thermal Buffer",
-    },
-    {
-      id: "designer-shingle",
-      badge: "03 // Class-4 Designer Architectural Shingle (Sample Spec)",
-      title: "Class-4 Designer Architectural Shingle",
-      subtitle: "UL-2218 hail-impact rated multi-layer dimensional profile",
-      lifespanBadge: "30–50 Yrs",
-      imageKey: "project3After",
-      windRating: "Up to 130 MPH / UL-2218 Class-4",
-      underlaymentSpec: "Breathable Synthetic + Valley Ice Shield",
-      thermalSpec: "Balanced Ridge & Soffit Intake Flow",
-    },
-  ],
-  trustStrip: [
-    {
-      id: "licensed",
-      title: "Licensed & Insured",
-      subtitle: "Full residential coverage (Sample)",
-      iconName: "ShieldCheck",
-    },
-    {
-      id: "inspections",
-      title: "Free Roof Inspections",
-      subtitle: "45-point macro photo diagnostics",
-      iconName: "Compass",
-    },
-    {
-      id: "materials",
-      title: "Quality Materials",
-      subtitle: "Slate, standing-seam & Class-4",
-      iconName: "Layers",
-    },
-    {
-      id: "warranty",
-      title: "Workmanship Warranty",
-      subtitle: "Written protection terms (Sample)",
-      iconName: "Award",
-    },
-    {
-      id: "installation",
-      title: "Professional Installation",
-      subtitle: "Daily cleanup & site protection",
-      iconName: "Hammer",
-    },
-  ],
-  about: {
-    label: "Who We Are",
-    heading: "More Than a Roof.",
-    highlightSerif: "A Commitment to Doing Things Right.",
-    leadParagraph:
-      "At AUREL Roofing Co., we view the roof not as a commodity shingle layer, but as the defining crown and structural shield of your residence.",
-    philosophyParagraph:
-      "Most premature roof failures never happen in the middle of an open slope—they begin at rushed chimney counter-flashing, under-ventilated soffits, and cut corners under the surface. Our craftsmen follow strict architectural details on every home we touch.",
-    craftsmanshipStatement:
-      "From elevating protective canopies over prized garden beds to sweeping every inch of lawn with magnetic rollers each evening, we treat your property with the care of a private estate.",
-    ctaLabel: "Discover Our Approach",
-    demoMetrics: [
+  materials: {
+    heading: "Choose the material, see what it takes.",
+    intro:
+      "Each material has its own fastening rules, underlayment and ventilation needs. Pick one, size your roof, and send the scope straight to the estimate form.",
+    note: "Figures are typical ranges for each system. Your written scope confirms the exact specification, schedule and crew.",
+    items: [
       {
-        value: "1,400",
-        suffix: "+",
-        label: "Sample Roof Assemblies",
-        note: "Editable demonstration figure",
+        id: "standing-seam",
+        title: "Standing-seam metal",
+        subtitle: "24-gauge panels, concealed fasteners, Kynar 500® finish",
+        lifespan: "50+ years",
+        wind: "Up to 140 mph, Class-4",
+        underlayment: "High-temperature ice and water shield",
+        thermal: "Solar-reflective cool-roof finish",
+        image: "project1",
       },
       {
-        value: "99.4",
-        suffix: "%",
-        label: "First-Pass Walkthrough Sign-Off",
-        note: "Illustrative quality benchmark",
+        id: "slate",
+        title: "Natural and composite slate",
+        subtitle: "Hand-split profile with copper flashing",
+        lifespan: "75–100 years",
+        wind: "Up to 130 mph, Class-4 hail and fire",
+        underlayment: "Double-layer synthetic",
+        thermal: "High thermal mass buffers temperature swings",
+        image: "project2",
       },
       {
-        value: "48",
-        suffix: " hrs",
-        label: "Inspection-to-Proposal Turnaround",
-        note: "Sample service commitment",
-      },
-    ],
-    pillars: [
-      "Hand-cut valleys & 24-gauge flashing",
-      "Dedicated on-site project director",
-      "Landscape tarping & magnetic sweep",
-      "Transparent line-by-line written scopes",
-    ],
-  },
-  whyChooseUs: {
-    label: "The AUREL Difference",
-    heading: "Quality You Can See.",
-    subheading:
-      "Four architectural standards that distinguish enduring residential roofing from volume contracting.",
-    principles: [
-      {
-        number: "01",
-        roman: "I.",
-        title: "Experienced Craftsmanship",
-        subtitle: "Specialized Guilds",
-        description:
-          "Standing-seam metal, natural quarry slate, and dimensional shingles each demand distinct fastening tolerances. We assign dedicated installation artisans trained specifically in your chosen roof architecture.",
-        specificationTag: "Custom-bent 24-gauge flashing details",
-        iconName: "DraftingCompass",
-      },
-      {
-        number: "02",
-        roman: "II.",
-        title: "Premium Roofing Materials",
-        subtitle: "UL-2218 Class-4 Rated",
-        description:
-          "A roof is only as resilient as what lies beneath. Every system incorporates high-temperature peel-and-stick ice barriers in valleys, breathable synthetic deck armor, and balanced intake-to-ridge airflow.",
-        specificationTag: "Zero compromise on hidden underlayments",
-        iconName: "Layers",
-      },
-      {
-        number: "03",
-        roman: "III.",
-        title: "Transparent Communication",
-        subtitle: "Annotated Diagnostics",
-        description:
-          "Before you make any decision, you receive high-resolution macro photographs of your current roof condition alongside an honest comparison of targeted repair versus full replacement—never high-pressure pitches.",
-        specificationTag: "Clear, itemized proposals with zero surprises",
-        iconName: "MessageSquareCode",
-      },
-      {
-        number: "04",
-        roman: "IV.",
-        title: "Reliable Project Delivery",
-        subtitle: "Estate Protection Protocol",
-        description:
-          "We stage materials neatly, shield driveways and landscaping with breathable protective tarps, provide end-of-day supervisor photo updates, and leave your grounds immaculate.",
-        specificationTag: "Nightly weatherproof dry-in & magnetic sweep",
-        iconName: "ClockCheck",
+        id: "shingle",
+        title: "Class-4 architectural shingle",
+        subtitle: "UL 2218 impact-rated, multi-layer dimensional profile",
+        lifespan: "30–50 years",
+        wind: "Up to 130 mph, UL 2218 Class-4",
+        underlayment: "Breathable synthetic plus valley ice shield",
+        thermal: "Balanced ridge and soffit airflow",
+        image: "serviceInspection",
       },
     ],
   },
-  processSteps: [
-    {
-      number: "01",
-      title: "Request an Inspection",
-      durationSample: "Step One • Quick Scheduling",
-      description:
-        "Tell us about your roofing concerns and schedule an assessment at a convenient time for your household.",
-      deliverable: "Confirmed Inspection Window",
-    },
-    {
-      number: "02",
-      title: "Roof Assessment",
-      durationSample: "Step Two • On-Site Diagnostic",
-      description:
-        "We evaluate the roof, flashings, and attic ventilation, capturing annotated photos to discuss suitable solutions.",
-      deliverable: "Annotated Photo Report & Material Samples",
-    },
-    {
-      number: "03",
-      title: "Plan & Installation",
-      durationSample: "Step Three • Precision Execution",
-      description:
-        "Review the proposed scope, materials, and project schedule before work begins with full landscape protection.",
-      deliverable: "Daily Supervisor Logs & Weatherproof Build",
-    },
-    {
-      number: "04",
-      title: "Final Walkthrough",
-      durationSample: "Step Four • Quality Sign-Off",
-      description:
-        "Review the completed work alongside your project lead and receive relevant project documentation and care guidance.",
-      deliverable: "Closeout Warranty Packet & Care Guide",
-    },
-  ],
-  finalCta: {
-    eyebrow: "Architectural Protection Starts Here",
-    heading: "Your Home Deserves a Stronger Roof.",
-    supportingCopy:
-      "Start with a conversation. Get the clarity, photographic diagnostics, and honest guidance you need to protect your home for decades.",
-    primaryCta: "Request Your Free Estimate",
-    secondaryCta: "Call Our Team",
+  approach: {
+    heading: "Most roofs fail below the surface.",
+    lead: "Water finds the shortcuts: a rushed chimney flashing, a blocked soffit, a skipped ice barrier.",
+    body: "We spend our time on those details, and we show you the evidence before you decide anything. A dedicated project director stays on site, and every scope is written line by line.",
+    standards: [
+      {
+        title: "Installers trained on your material",
+        description:
+          "Standing-seam, slate and shingle each demand different fastening tolerances. The crew on your roof is trained on the system you chose.",
+      },
+      {
+        title: "The hidden layers done properly",
+        description:
+          "Ice barrier in every valley, breathable synthetic underlayment, and balanced intake-to-ridge airflow. These are the layers you never see again.",
+      },
+      {
+        title: "Diagnostics in plain language",
+        description:
+          "You get macro photographs of your roof’s condition and an honest comparison of repair versus replacement. No pressure to pick the bigger job.",
+      },
+      {
+        title: "A site left in better order",
+        description:
+          "Materials staged neatly, landscaping covered, a supervisor photo update each day, and a nightly dry-in and magnet sweep.",
+      },
+    ],
   },
-  socials: [
-    { platform: "Instagram", href: "#contact", handle: "@aurel.roofing.sample" },
-    { platform: "LinkedIn", href: "#contact", handle: "AUREL Architectural Roofing" },
-    { platform: "Houzz", href: "#contact", handle: "AUREL Exterior Portfolio" },
-    { platform: "YouTube", href: "#contact", handle: "AUREL Craftsmanship Journal" },
-  ],
+  process: {
+    heading: "From first call to final walkthrough.",
+    intro: "Four steps, each ending with something you can hold.",
+    steps: [
+      {
+        title: "Request an inspection",
+        description:
+          "Tell us what you’re seeing and pick a time that suits your household.",
+        deliverable: "A confirmed inspection window",
+      },
+      {
+        title: "We assess the roof",
+        description:
+          "We check the roof surface, flashings and attic ventilation, and photograph everything we find.",
+        deliverable: "An annotated photo report and material samples",
+      },
+      {
+        title: "Plan, then install",
+        description:
+          "You review the scope, materials and schedule first. Work starts only once you’re comfortable, with your landscaping protected throughout.",
+        deliverable: "Daily supervisor logs and a weatherproof build",
+      },
+      {
+        title: "Final walkthrough",
+        description:
+          "We walk the finished roof with you and hand over the paperwork you’ll need later.",
+        deliverable: "Warranty packet and care guide",
+      },
+    ],
+  },
+  contactSection: {
+    heading: "Book a free roof inspection.",
+    intro:
+      "Tell us about your home and what you’ve noticed. We’ll reach out by the method you choose to arrange a time.",
+    formTitle: "Request an estimate",
+    formNote: "Free 45-point inspection and an itemized written scope. No obligation.",
+  },
   legalNote:
-    "Demonstration Portfolio Notice: AUREL Roofing Co. is a fictional brand concept created for design and engineering showcase purposes. All statistics, locations, licenses, and client testimonials are editable sample content.",
+    "AUREL Roofing Co. is a fictional brand created as a design and engineering showcase. All figures, locations, licenses and client reviews are editable sample content.",
 };

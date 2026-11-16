@@ -1,53 +1,60 @@
-import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Instrument_Serif } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 import { SITE_CONFIG } from "@/data/site";
-import { AnimationProvider } from "@/components/providers/animation-provider";
+import { EstimateProvider } from "@/lib/estimate-context";
+import { WhatsAppButton } from "@/components/layout/whatsapp-button";
+import { SmoothScroll } from "@/components/providers/smooth-scroll";
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-jakarta",
-  weight: ["400", "500", "600", "700"],
+const archivo = localFont({
+  src: "../fonts/Archivo-latin-wdth.woff2",
+  variable: "--font-archivo",
+  weight: "100 900",
   display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  variable: "--font-instrument-serif",
-  weight: ["400"],
-  style: ["normal", "italic"],
+const newsreader = localFont({
+  src: "../fonts/Newsreader-latin-opsz.woff2",
+  variable: "--font-newsreader",
+  weight: "200 800",
   display: "swap",
 });
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurelroofing.example.com";
 
 export const metadata: Metadata = {
-  title: `${SITE_CONFIG.companyName} — Architectural Roofing & Exterior Craftsmanship`,
+  metadataBase: new URL(SITE_URL),
+  title: `${SITE_CONFIG.companyName} — Roof replacement, repair and inspection`,
   description:
-    "Bespoke residential roofing, standing-seam metal, natural slate, storm restoration, and architectural exterior envelopes.",
-  alternates: {
-    canonical: "https://aurelroofing.example.com",
-  },
+    "Residential roofing done layer by layer: photographed inspections, itemized written scopes, standing-seam metal, slate and Class-4 shingle systems.",
+  alternates: { canonical: "/" },
   openGraph: {
-    title: `${SITE_CONFIG.companyName} — Built to Protect. Designed to Last.`,
+    title: `${SITE_CONFIG.companyName} — A roof is a system`,
     description:
-      "Architectural roofing systems, precision craftsmanship, and transparent roof assessments for discerning homeowners.",
-    url: "https://aurelroofing.example.com",
+      "Free 45-point roof inspections and itemized written scopes before any work begins.",
+    url: SITE_URL,
     siteName: SITE_CONFIG.companyName,
     type: "website",
     locale: "en_US",
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#e8ecea",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const jsonLdPlaceholder = {
+}: Readonly<{ children: React.ReactNode }>) {
+  const jsonLd = {
     "@context": "https://schema.org",
     "@type": "RoofingContractor",
     name: SITE_CONFIG.companyName,
     description: SITE_CONFIG.tagline,
-    url: "https://aurelroofing.example.com",
+    url: SITE_URL,
     telephone: SITE_CONFIG.contact.phoneDisplay,
     email: SITE_CONFIG.contact.email,
     address: {
@@ -59,19 +66,24 @@ export default function RootLayout({
   };
 
   return (
-    <html
-      lang="en"
-      data-theme="royal-gold"
-      className={`${jakarta.variable} ${instrumentSerif.variable} scroll-smooth`}
-    >
-      <body className="bg-ivory text-obsidian selection:bg-copper selection:text-white">
+    <html lang="en" className={`${archivo.variable} ${newsreader.variable}`}>
+      <body>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLdPlaceholder),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <AnimationProvider>{children}</AnimationProvider>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink focus:px-4 focus:py-2 focus:text-chalk"
+        >
+          Skip to content
+        </a>
+        <SmoothScroll>
+          <EstimateProvider>{children}</EstimateProvider>
+          <aside aria-label="Quick contact">
+            <WhatsAppButton />
+          </aside>
+        </SmoothScroll>
       </body>
     </html>
   );

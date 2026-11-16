@@ -1,64 +1,38 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { SITE_CONFIG } from "@/data/site";
-import { EstimateFormValues } from "@/types";
-import { SectionHeading } from "@/components/ui/section-heading";
-import { Reveal } from "@/components/ui/reveal";
+import { Button } from "@/components/ui/button";
+import { useEstimate } from "@/lib/estimate-context";
+import { whatsappUrl } from "@/lib/whatsapp";
+import { IMAGES } from "@/data/images";
+import { Photo } from "@/components/ui/photo";
+import { WordsReveal } from "@/components/ui/motion";
+import {
+  CONTACT_METHODS,
+  SERVICE_OPTIONS,
+  estimateSchema,
+  type EstimateFormValues,
+} from "@/lib/estimate-schema";
+import { cn } from "@/lib/utils";
 
-const estimateSchema = z.object({
-  fullName: z
-    .string()
-    .min(2, "Please enter your full name (at least 2 characters)."),
-  email: z.string().email("Please enter a valid email address."),
-  phone: z.string().min(7, "Please enter a valid phone number."),
-  propertyAddress: z.string().optional(),
-  serviceRequired: z.enum([
-    "Roof Replacement",
-    "Roof Repair",
-    "Roof Inspection",
-    "Storm Damage",
-    "Gutter Installation",
-    "Siding & Exterior",
-    "Other",
-  ]),
-  preferredContactMethod: z.enum(["Phone Call", "Email", "Text Message"]),
-  projectDescription: z
-    .string()
-    .min(
-      12,
-      "Please share a brief note about your roofing needs (at least 12 characters)."
-    ),
-});
-
-interface ContactSectionProps {
-  preselectedService?: string;
-  prefilledScopeDescription?: string;
+interface Result {
+  values: EstimateFormValues;
+  reference: string;
+  delivered: boolean;
 }
 
-async function submitEstimateDemonstration(
-  data: EstimateFormValues
-): Promise<{ ok: boolean; referenceCode: string }> {
-  await new Promise((resolve) => setTimeout(resolve, 650));
-  const randomDigits = Math.floor(1000 + Math.random() * 9000);
-  return {
-    ok: true,
-    referenceCode: `AUR-${randomDigits}`,
-  };
-}
+const field =
+  "h-12 w-full rounded-[2px] border border-rule bg-paper px-3.5 text-[0.9375rem] text-ink placeholder:text-lead/70 aria-[invalid=true]:border-alert";
 
-export function ContactSection({
-  preselectedService,
-  prefilledScopeDescription,
-}: ContactSectionProps) {
-  const [submittedData, setSubmittedData] = useState<{
-    values: EstimateFormValues;
-    referenceCode: string;
-  } | null>(null);
+export function ContactSection() {
+  const { contact, contactSection } = SITE_CONFIG;
+  const { service, scope } = useEstimate();
+  const [result, setResult] = useState<Result | null>(null);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -76,375 +50,237 @@ export function ContactSection({
       serviceRequired: "Roof Replacement",
       preferredContactMethod: "Phone Call",
       projectDescription: "",
+      website: "",
     },
   });
 
+  // Pre-fill from the services list and the material configurator
   useEffect(() => {
-    if (!preselectedService) return;
-    const validServices: EstimateFormValues["serviceRequired"][] = [
-      "Roof Replacement",
-      "Roof Repair",
-      "Roof Inspection",
-      "Storm Damage",
-      "Gutter Installation",
-      "Siding & Exterior",
-      "Other",
-    ];
-    const matched = validServices.find((s) =>
-      preselectedService.toLowerCase().includes(s.toLowerCase())
-    );
-    if (matched) {
-      setValue("serviceRequired", matched);
-    } else if (preselectedService.toLowerCase().includes("storm")) {
-      setValue("serviceRequired", "Storm Damage");
+    if (service && (SERVICE_OPTIONS as readonly string[]).includes(service)) {
+      setValue("serviceRequired", service as EstimateFormValues["serviceRequired"]);
     }
-  }, [preselectedService, setValue]);
-
+  }, [service, setValue]);
   useEffect(() => {
-    if (prefilledScopeDescription) {
-      setValue("serviceRequired", "Roof Replacement");
-      setValue("projectDescription", prefilledScopeDescription);
-    }
-  }, [prefilledScopeDescription, setValue]);
+    if (scope) setValue("projectDescription", scope, { shouldValidate: false });
+  }, [scope, setValue]);
 
   const onSubmit = async (values: EstimateFormValues) => {
-    const response = await submitEstimateDemonstration(values);
-    if (response.ok) {
-      setSubmittedData({
-        values,
-        referenceCode: response.referenceCode,
+    setServerError(null);
+    try {
+      const res = await fetch("/api/estimate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
       });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        setServerError(data.error ?? "Something went wrong. Please call us instead.");
+        return;
+      }
+      setResult({ values, reference: data.reference, delivered: data.delivered });
+    } catch {
+      setServerError("We couldn’t reach the server. Check your connection or call us instead.");
     }
   };
 
+  const err = (name: keyof EstimateFormValues) => errors[name]?.message as string | undefined;
+
   return (
-    <section id="contact" className="py-24 lg:py-32 dark-mesh-surface text-ivory">
-      <div className="mx-auto max-w-[1380px] px-4 sm:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left: Concierge Details */}
-          <Reveal className="lg:col-span-5 space-y-8">
-            <SectionHeading
-              label="Complimentary Consultation"
-              heading="Start With an Honest"
-              serifAccent="Roof Assessment."
-              description="Tell us about your home and roofing goals. Whether you need a targeted leak repair, storm damage documentation, or a full architectural roof replacement, we provide clear, itemized guidance."
-              theme="dark"
-              className="mb-0"
-            />
+    <section
+      id="contact"
+      aria-labelledby="contact-title"
+      className="pitch-top on-deep relative isolate bg-deep text-chalk"
+    >
+      <div aria-hidden="true" className="absolute inset-0 -z-10">
+        <Photo image={IMAGES.cta} sizes="100vw" className="h-full w-full" imgClassName="opacity-25 saturate-[0.6]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-deep via-deep/80 to-deep" />
+      </div>
+      <div className="wrap pb-[var(--section-y)]">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5">
+            <WordsReveal id="contact-title" className="t-h2" text={contactSection.heading} />
+            <p className="t-body mt-6 text-mist">{contactSection.intro}</p>
 
-            <div className="space-y-4">
-              <a
-                href={SITE_CONFIG.contact.phoneHref}
-                className="block p-6 rounded-2xl bg-graphite/80 border border-white/10 hover:border-copper/60 transition-colors"
-              >
-                <span className="text-xs font-medium text-copperLight block">
-                  Direct Architectural Desk (Sample)
-                </span>
-                <span className="font-display text-2xl font-semibold text-ivory mt-1 block">
-                  {SITE_CONFIG.contact.phoneDisplay}
-                </span>
-                <span className="text-xs text-ivory/60 mt-1 block">
-                  Priority storm tarping &amp; inspection dispatch
-                </span>
-              </a>
-
-              <a
-                href={`mailto:${SITE_CONFIG.contact.email}`}
-                className="block p-6 rounded-2xl bg-graphite/80 border border-white/10 hover:border-copper/60 transition-colors"
-              >
-                <span className="text-xs font-medium text-copperLight block">
-                  Project Concierge Email
-                </span>
-                <span className="font-display text-base font-semibold text-ivory mt-1 block">
-                  {SITE_CONFIG.contact.email}
-                </span>
-                <span className="text-xs text-ivory/60 mt-1 block">
-                  Share architectural drawings, photos, or scope inquiries
-                </span>
-              </a>
-
-              <div className="p-6 rounded-2xl bg-graphite/40 border border-white/10">
-                <span className="text-xs font-medium text-sage block">
-                  Inspection Hours &amp; Studio
-                </span>
-                <span className="font-display text-base font-semibold text-ivory mt-1 block">
-                  {SITE_CONFIG.contact.officeHours}
-                </span>
-                <span className="text-xs text-ivory/60 mt-1 block">
-                  {SITE_CONFIG.contact.headquartersSample}
-                </span>
+            <dl className="mt-10 divide-y divide-rule-deep border-y border-rule-deep">
+              <div className="py-5">
+                <dt className="t-meta text-mist">Call</dt>
+                <dd className="mt-1">
+                  <a href={contact.phoneHref} className="font-sans text-2xl font-semibold [font-stretch:108%] hover:text-patina-hi">
+                    {contact.phoneDisplay}
+                  </a>
+                  <span className="t-meta mt-1 block text-mist">{contact.emergencyNote}</span>
+                </dd>
               </div>
-            </div>
-          </Reveal>
+              <div className="py-5">
+                <dt className="t-meta text-mist">Prefer to pick a time?</dt>
+                <dd className="mt-3 flex flex-wrap gap-3">
+                  <Button href="/book" variant="outline-deep">Book online</Button>
+                  <Button href={whatsappUrl()} variant="outline-deep">WhatsApp us</Button>
+                </dd>
+              </div>
+              <div className="py-5">
+                <dt className="t-meta text-mist">Email</dt>
+                <dd className="mt-1">
+                  <a href={`mailto:${contact.email}`} className="break-all text-[1.0625rem] font-medium hover:text-patina-hi">
+                    {contact.email}
+                  </a>
+                  <span className="t-meta mt-1 block text-mist">Send photos, drawings or questions.</span>
+                </dd>
+              </div>
+              <div className="py-5">
+                <dt className="t-meta text-mist">Hours</dt>
+                <dd className="mt-1 text-[1.0625rem] font-medium">
+                  {contact.officeHours}
+                  <span className="t-meta mt-1 block font-normal text-mist">{contact.headquartersSample}</span>
+                </dd>
+              </div>
+            </dl>
+          </div>
 
-          {/* Right: Elevated Tactile Form Surface */}
-          <Reveal delay={0.1} className="lg:col-span-7">
-            <div className="rounded-3xl bg-ivory text-obsidian p-7 sm:p-11 border border-stone shadow-2xl">
-              {submittedData ? (
-                <div className="py-8 space-y-6" role="status" aria-live="polite">
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sage/20 text-obsidian text-xs font-semibold">
-                    ✓ Demonstration Inquiry Recorded
-                  </div>
-                  <h3 className="font-display text-3xl font-semibold text-obsidian">
-                    Thank You, {submittedData.values.fullName}.
+          <div className="lg:col-span-7">
+            <div className="bg-chalk p-6 text-ink sm:p-10">
+              {result ? (
+                <div role="status" aria-live="polite" className="space-y-6">
+                  <h3 className="t-h2 text-[1.75rem] sm:text-[2.25rem]">
+                    Thanks, {result.values.fullName.split(" ")[0]}.
                   </h3>
-                  <p className="text-sm sm:text-base text-charcoal/85 leading-relaxed">
-                    This is an interactive{" "}
-                    <strong>frontend demonstration state</strong>. In a live
-                    deployment connected to your CRM or email endpoint, your{" "}
-                    <strong>{submittedData.values.serviceRequired}</strong>{" "}
-                    request would now be routed to the estimating desk for
-                    follow-up via{" "}
-                    <strong>
-                      {submittedData.values.preferredContactMethod}
-                    </strong>
-                    .
+                  <p className="t-body">
+                    {result.delivered
+                      ? `We’ve received your ${result.values.serviceRequired.toLowerCase()} request and will reach out by ${result.values.preferredContactMethod.toLowerCase()} to arrange a time.`
+                      : "Your request passed validation, but this site isn’t connected to a destination yet, so nothing was sent. Set LEAD_WEBHOOK_URL on the server to deliver requests."}
                   </p>
-                  <div className="p-6 rounded-2xl bg-white border border-stone space-y-2.5 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-charcoal/60">
-                        Demonstration Reference:
-                      </span>
-                      <span className="font-bold text-copper">
-                        {submittedData.referenceCode}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-charcoal/60">
-                        Requested Service Scope:
-                      </span>
-                      <span className="font-semibold text-obsidian">
-                        {submittedData.values.serviceRequired}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-charcoal/60">
-                        Preferred Follow-Up:
-                      </span>
-                      <span className="font-semibold text-obsidian">
-                        {submittedData.values.preferredContactMethod} (
-                        {submittedData.values.phone})
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
+                  <dl className="divide-y divide-rule border-y border-rule text-[0.9375rem]">
+                    {[
+                      ["Reference", result.reference],
+                      ["Service", result.values.serviceRequired],
+                      ["Contact by", `${result.values.preferredContactMethod}, ${result.values.phone}`],
+                    ].map(([k, v]) => (
+                      <div key={k} className="flex justify-between gap-4 py-3">
+                        <dt className="text-lead">{k}</dt>
+                        <dd className="text-right font-medium">{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <Button
+                    variant="outline"
                     onClick={() => {
-                      setSubmittedData(null);
+                      setResult(null);
                       reset();
                     }}
-                    className="px-6 py-3 rounded-full bg-obsidian text-ivory text-xs font-semibold tracking-wide cursor-pointer"
                   >
-                    Submit Another Sample Request
-                  </button>
+                    Send another request
+                  </Button>
                 </div>
               ) : (
-                <form
-                  onSubmit={handleSubmit(onSubmit)}
-                  noValidate
-                  className="space-y-6"
-                >
-                  <div className="pb-5 border-b border-stone flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <h3 className="font-display text-2xl font-semibold text-obsidian">
-                        Request Your Free Estimate
-                      </h3>
-                      <p className="text-xs sm:text-sm text-charcoal/70 mt-1">
-                        Complimentary 45-point inspection &amp; itemized written
-                        scope.
-                      </p>
-                    </div>
-                    <span className="px-3 py-1 rounded-full bg-obsidian text-ivory text-[11px] font-medium">
-                      Zero Obligation
-                    </span>
+                <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
+                  <div className="border-b border-rule pb-5">
+                    <h3 className="t-h3">{contactSection.formTitle}</h3>
+                    <p className="t-meta mt-1 text-lead">{contactSection.formNote}</p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label
-                        htmlFor="fullName"
-                        className="block text-xs font-semibold text-obsidian mb-2"
-                      >
-                        Full Name <span className="text-copper">*</span>
-                      </label>
-                      <input
-                        id="fullName"
-                        type="text"
-                        placeholder="Arthur Pendelton"
-                        {...register("fullName")}
-                        className="w-full h-12 px-4 rounded-xl bg-white border border-stone text-sm text-obsidian focus:outline-none focus:border-copper"
-                      />
-                      {errors.fullName && (
-                        <p className="mt-1.5 flex items-center gap-1 text-xs text-red-700 font-medium">
-                          <AlertCircle className="h-3.5 w-3.5 shrink-0" />
-                          {errors.fullName.message}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-xs font-semibold text-obsidian mb-2"
-                      >
-                        Email Address <span className="text-copper">*</span>
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        placeholder="name@domain.com"
-                        {...register("email")}
-                        className="w-full h-12 px-4 rounded-xl bg-white border border-stone text-sm text-obsidian focus:outline-none focus:border-copper"
-                      />
-                      {errors.email && (
-                        <p className="mt-1.5 flex items-center gap-1 text-xs text-red-700 font-medium">
-                          <AlertCircle className="h-3.5 w-3.5 shrink-0" />
-                          {errors.email.message}
-                        </p>
-                      )}
-                    </div>
+                  {/* Honeypot: hidden from people and assistive tech */}
+                  <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+                    <label htmlFor="website">Leave this field empty</label>
+                    <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label
-                        htmlFor="phone"
-                        className="block text-xs font-semibold text-obsidian mb-2"
-                      >
-                        Phone Number <span className="text-copper">*</span>
-                      </label>
-                      <input
-                        id="phone"
-                        type="tel"
-                        placeholder="(555) 234-5678"
-                        {...register("phone")}
-                        className="w-full h-12 px-4 rounded-xl bg-white border border-stone text-sm text-obsidian focus:outline-none focus:border-copper"
-                      />
-                      {errors.phone && (
-                        <p className="mt-1.5 flex items-center gap-1 text-xs text-red-700 font-medium">
-                          <AlertCircle className="h-3.5 w-3.5 shrink-0" />
-                          {errors.phone.message}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="propertyAddress"
-                        className="block text-xs font-semibold text-obsidian mb-2"
-                      >
-                        Property Address{" "}
-                        <span className="text-charcoal/50 font-normal">
-                          (Optional)
-                        </span>
-                      </label>
-                      <input
-                        id="propertyAddress"
-                        type="text"
-                        placeholder="Street address or neighborhood"
-                        {...register("propertyAddress")}
-                        className="w-full h-12 px-4 rounded-xl bg-white border border-stone text-sm text-obsidian focus:outline-none focus:border-copper"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label
-                        htmlFor="serviceRequired"
-                        className="block text-xs font-semibold text-obsidian mb-2"
-                      >
-                        Service Required <span className="text-copper">*</span>
-                      </label>
-                      <select
-                        id="serviceRequired"
-                        {...register("serviceRequired")}
-                        className="w-full h-12 px-4 rounded-xl bg-white border border-stone text-sm text-obsidian focus:outline-none focus:border-copper"
-                      >
-                        <option value="Roof Replacement">
-                          Roof Replacement
-                        </option>
-                        <option value="Roof Repair">Roof Repair</option>
-                        <option value="Roof Inspection">Roof Inspection</option>
-                        <option value="Storm Damage">Storm Damage</option>
-                        <option value="Gutter Installation">
-                          Gutter Installation
-                        </option>
-                        <option value="Siding & Exterior">
-                          Siding &amp; Exterior
-                        </option>
-                        <option value="Other">Other</option>
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <Field id="fullName" label="Full name" error={err("fullName")} required>
+                      <input id="fullName" type="text" autoComplete="name" aria-invalid={!!errors.fullName} aria-describedby={errors.fullName ? "fullName-err" : undefined} className={field} {...register("fullName")} />
+                    </Field>
+                    <Field id="email" label="Email" error={err("email")} required>
+                      <input id="email" type="email" autoComplete="email" aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-err" : undefined} className={field} {...register("email")} />
+                    </Field>
+                    <Field id="phone" label="Phone" error={err("phone")} required>
+                      <input id="phone" type="tel" autoComplete="tel" aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "phone-err" : undefined} className={field} {...register("phone")} />
+                    </Field>
+                    <Field id="propertyAddress" label="Property address (optional)">
+                      <input id="propertyAddress" type="text" autoComplete="street-address" placeholder="Street or neighborhood" className={field} {...register("propertyAddress")} />
+                    </Field>
+                    <Field id="serviceRequired" label="Service" required>
+                      <select id="serviceRequired" className={cn(field, "cursor-pointer")} {...register("serviceRequired")}>
+                        {SERVICE_OPTIONS.map((s) => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
                       </select>
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="preferredContactMethod"
-                        className="block text-xs font-semibold text-obsidian mb-2"
-                      >
-                        Preferred Contact Method{" "}
-                        <span className="text-copper">*</span>
-                      </label>
-                      <select
-                        id="preferredContactMethod"
-                        {...register("preferredContactMethod")}
-                        className="w-full h-12 px-4 rounded-xl bg-white border border-stone text-sm text-obsidian focus:outline-none focus:border-copper"
-                      >
-                        <option value="Phone Call">Phone Call</option>
-                        <option value="Email">Email</option>
-                        <option value="Text Message">Text Message</option>
+                    </Field>
+                    <Field id="preferredContactMethod" label="Best way to reach you" required>
+                      <select id="preferredContactMethod" className={cn(field, "cursor-pointer")} {...register("preferredContactMethod")}>
+                        {CONTACT_METHODS.map((m) => (
+                          <option key={m} value={m}>{m}</option>
+                        ))}
                       </select>
-                    </div>
+                    </Field>
                   </div>
 
-                  <div>
-                    <label
-                      htmlFor="projectDescription"
-                      className="block text-xs font-semibold text-obsidian mb-2"
-                    >
-                      Project Description <span className="text-copper">*</span>
-                    </label>
+                  <Field id="projectDescription" label="What’s going on with your roof?" error={err("projectDescription")} required>
                     <textarea
                       id="projectDescription"
                       rows={4}
-                      placeholder="Tell us about your roof's approximate age, any active leaks or storm damage, or the architectural materials you are considering..."
+                      placeholder="Roof age, active leaks, storm damage, or the material you’re considering."
+                      aria-invalid={!!errors.projectDescription}
+                      aria-describedby={errors.projectDescription ? "projectDescription-err" : undefined}
+                      className={cn(field, "h-auto py-3")}
                       {...register("projectDescription")}
-                      className="w-full p-4 rounded-xl bg-white border border-stone text-sm text-obsidian focus:outline-none focus:border-copper"
                     />
-                    {errors.projectDescription && (
-                      <p className="mt-1.5 flex items-center gap-1 text-xs text-red-700 font-medium">
-                        <AlertCircle className="h-3.5 w-3.5 shrink-0" />
-                        {errors.projectDescription.message}
-                      </p>
-                    )}
-                  </div>
+                  </Field>
 
-                  <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <p className="text-xs text-charcoal/65 max-w-xs">
-                      Interactive frontend demonstration state — ready to
-                      connect to your CRM endpoint.
+                  {serverError && (
+                    <p role="alert" className="flex items-start gap-2 text-[0.9375rem] font-medium text-alert">
+                      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                      {serverError}
                     </p>
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="btn-beveled-primary inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full text-white font-semibold text-sm cursor-pointer"
-                    >
+                  )}
+
+                  <div className="flex flex-wrap items-center gap-4">
+                    <Button type="submit" size="lg" disabled={isSubmitting}>
                       {isSubmitting ? (
-                        <span className="inline-flex items-center gap-2">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          Preparing Your Scope...
-                        </span>
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                          Sending…
+                        </>
                       ) : (
-                        <span>Submit Estimate Request ↗</span>
+                        "Send estimate request"
                       )}
-                    </button>
+                    </Button>
+                    <p className="t-meta text-lead">We’ll only use your details to arrange your inspection.</p>
                   </div>
                 </form>
               )}
             </div>
-          </Reveal>
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function Field({
+  id,
+  label,
+  error,
+  required,
+  children,
+}: {
+  id: string;
+  label: string;
+  error?: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-2 block text-[0.9375rem] font-medium">
+        {label}
+        {required && <span className="text-patina" aria-hidden="true"> *</span>}
+      </label>
+      {children}
+      {error && (
+        <p id={`${id}-err`} className="mt-1.5 flex items-start gap-1.5 text-[0.8125rem] font-medium text-alert">
+          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          {error}
+        </p>
+      )}
+    </div>
   );
 }

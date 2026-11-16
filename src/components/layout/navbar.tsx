@@ -1,129 +1,122 @@
 "use client";
 
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Phone } from "lucide-react";
-import { motion } from "framer-motion";
 import { NAVIGATION_LINKS } from "@/data/navigation";
 import { SITE_CONFIG } from "@/data/site";
+import { Logo } from "@/components/ui/logo";
+import { Button } from "@/components/ui/button";
 import { MobileMenu } from "@/components/layout/mobile-menu";
-import { scrollToSection } from "@/lib/utils";
+import { useActiveSection } from "@/hooks/use-active-section";
+import { cn, scrollToSection } from "@/lib/utils";
+
+const IDS = NAVIGATION_LINKS.map((l) => l.href.slice(1));
 
 export function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const onHome = usePathname() === "/";
+  const active = useActiveSection(IDS);
+  // Off the home page there is no dark hero behind the bar, so it is always solid.
+  const solid = scrolled || !onHome;
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
-      <motion.header
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-        className="sticky top-3 z-40 mx-auto max-w-[1380px] px-4 sm:px-8 transition-all duration-500"
+      <header
+        className={cn(
+          "sticky top-0 z-40 transition-[background-color,box-shadow,color] duration-300",
+          solid ? "bg-paper text-ink shadow-[0_1px_0_var(--color-rule)]" : "on-deep bg-transparent text-chalk"
+        )}
       >
-        <div className="rounded-full bg-obsidian/85 backdrop-blur-2xl border border-white/10 px-5 sm:px-7 py-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.35)] flex items-center justify-between gap-4">
-          {/* Sculptural Brand Wordmark */}
-          <a
-            href="#home"
+        <div className="wrap flex h-16 items-center justify-between gap-6 lg:h-[4.5rem]">
+          <Link
+            href="/"
             onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("#home");
+              if (onHome) {
+                e.preventDefault();
+                scrollToSection("#home");
+              }
             }}
-            className="group flex items-center gap-3.5 focus:outline-none"
+            className="flex items-center gap-2.5"
           >
-            <div className="h-9 w-9 rounded-full bg-copper/15 border border-copper/40 flex items-center justify-center transition-transform duration-500 group-hover:rotate-12">
-              <svg
-                viewBox="0 0 36 36"
-                fill="none"
-                className="h-5 w-5"
-                aria-hidden="true"
-              >
-                <path
-                  d="M5 24L18 10L31 24"
-                  stroke="var(--hex-accent)"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M11 24L18 16.5L25 24"
-                  stroke="var(--hex-ivory)"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="font-display text-lg font-bold tracking-[0.14em] text-ivory">
-                {SITE_CONFIG.shortName}
-              </span>
-              <span className="hidden sm:inline-block font-serif italic text-sm text-copperLight">
-                Roofing Atelier
-              </span>
-            </div>
-          </a>
+            <Logo />
+            <span className="font-sans text-lg font-semibold tracking-[0.04em] [font-stretch:115%]">
+              {SITE_CONFIG.shortName}
+            </span>{" "}
+            <span className={cn("t-meta max-sm:sr-only", solid ? "text-lead" : "text-mist")}>Roofing Co.</span>
+          </Link>
 
-          {/* Center Editorial Nav Links */}
-          <nav
-            className="hidden lg:flex items-center gap-8"
-            aria-label="Primary Navigation"
-          >
-            {NAVIGATION_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.href);
-                }}
-                className="text-xs font-medium tracking-wide text-ivory/75 hover:text-white transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
+          <nav aria-label="Primary" className="hidden lg:block">
+            <ul className="flex items-center gap-8">
+              {NAVIGATION_LINKS.map((link) => {
+                const isActive = active === link.href.slice(1);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={onHome ? link.href : `/${link.href}`}
+                      aria-current={isActive ? "true" : undefined}
+                      onClick={(e) => {
+                        if (onHome) {
+                          e.preventDefault();
+                          scrollToSection(link.href);
+                        }
+                      }}
+                      className={cn(
+                        "relative py-2 text-[0.9375rem] font-medium transition-colors",
+                        isActive ? "text-current" : solid ? "text-lead hover:text-ink" : "text-chalk/70 hover:text-chalk",
+                        "after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:bg-patina-hi after:transition-transform after:duration-300 after:ease-[var(--ease-out)]",
+                        isActive ? "after:scale-x-100" : "after:scale-x-0"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </nav>
 
-          {/* Right Direct Call & Pill CTA */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden items-center gap-5 lg:flex">
             <a
               href={SITE_CONFIG.contact.phoneHref}
-              className="inline-flex items-center gap-2 text-xs font-medium text-ivory/85 hover:text-copperLight transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
+              className="inline-flex items-center gap-2 text-[0.9375rem] font-medium hover:text-patina-hi"
             >
-              <Phone className="h-3.5 w-3.5 text-copperLight" />
-              <span>{SITE_CONFIG.contact.phoneDisplay}</span>
+              <Phone className="h-4 w-4" aria-hidden="true" />
+              {SITE_CONFIG.contact.phoneDisplay}
             </a>
-
-            <button
-              type="button"
-              onClick={() => scrollToSection("#contact")}
-              className="btn-beveled-primary inline-flex items-center gap-2 h-10 px-5 rounded-full text-white text-xs font-semibold tracking-wide transition-transform hover:-translate-y-0.5 cursor-pointer"
-            >
-              <span>Get Free Estimate</span>
-              <span>↗</span>
-            </button>
+            <Button href="/book">Book inspection</Button>
           </div>
 
-          {/* Mobile Trigger */}
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-1 lg:hidden">
             <a
               href={SITE_CONFIG.contact.phoneHref}
-              className="h-9 w-9 rounded-full bg-white/10 flex items-center justify-center text-copperLight"
-              aria-label="Call team"
+              aria-label={`Call ${SITE_CONFIG.contact.phoneDisplay}`}
+              className="grid h-11 w-11 place-items-center"
             >
-              <Phone className="h-4 w-4" />
+              <Phone className="h-5 w-5" aria-hidden="true" />
             </a>
             <button
               type="button"
-              onClick={() => setMobileOpen(true)}
-              className="h-9 px-3.5 rounded-full bg-white/10 text-xs font-medium text-ivory hover:bg-white/20 cursor-pointer"
-              aria-label="Open menu"
+              onClick={() => setOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={open}
+              className="h-11 cursor-pointer px-3 text-[0.9375rem] font-medium"
             >
               Menu
             </button>
           </div>
         </div>
-      </motion.header>
-
-      <MobileMenu isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
+      </header>
+      <MobileMenu isOpen={open} onClose={() => setOpen(false)} onHome={onHome} />
     </>
   );
 }

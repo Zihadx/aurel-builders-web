@@ -2,51 +2,45 @@ import { FaqItem } from "@/types";
 
 export const FAQS_DATA: FaqItem[] = [
   {
-    id: "faq-01",
-    category: "Inspection & Replacement",
-    question: "How do I know when my roof needs replacement?",
+    id: "faq-replace",
+    category: "Inspection and replacement",
+    question: "How do I know when my roof needs replacing?",
     answer:
-      "Common indicators include shingles that are curling, cracking, or losing significant mineral granules in your gutters; recurring leaks around valleys or chimneys; sagging roof planes; daylight or moisture streaks visible in the attic; or an asphalt roof approaching 18–25 years of service. However, an isolated leak does not always require a full replacement. Our diagnostic inspection separates localized flashing failures from systemic material exhaustion so you can make an informed decision.",
-    keyTakeaway: "Look for granule loss, curling edges, interior attic moisture, or roofs exceeding 20 years—verified via diagnostic photo inspection.",
+      "Common signs are curling or cracking shingles, heavy mineral granules collecting in your gutters, repeated leaks around valleys or chimneys, sagging roof planes, daylight or moisture streaks in the attic, or an asphalt roof past 18–25 years. An isolated leak doesn’t always mean a new roof. The inspection separates a local flashing failure from a roof that’s worn out, so you can decide with the facts.",
   },
   {
-    id: "faq-02",
-    category: "Inspection & Replacement",
-    question: "Do you offer free roof inspections?",
+    id: "faq-inspection",
+    category: "Inspection and replacement",
+    question: "Is the roof inspection really free?",
     answer:
-      "Yes. We provide complimentary, no-obligation roof and exterior inspections for homeowners and property managers. A specialist evaluates your roof surface, perimeter flashings, gutters, soffit intake vents, and attic decking, then shares an annotated photographic summary with clear recommendations.",
-    keyTakeaway: "Complimentary 45-point visual and attic diagnostic with annotated photos and zero obligation.",
+      "Yes. We inspect the roof surface, perimeter flashings, gutters, soffit vents and attic decking at no cost and with no obligation, then give you an annotated photo summary with clear recommendations.",
   },
   {
-    id: "faq-03",
-    category: "Materials & Timeline",
-    question: "How long does a typical roofing project take?",
+    id: "faq-time",
+    category: "Materials and timeline",
+    question: "How long does a roofing project take?",
     answer:
-      "Most targeted roof repairs and seamless gutter installations are completed within a single day. A complete residential architectural shingle replacement typically takes 2 to 4 days depending on roof pitch, square footage, and structural decking condition. Custom standing-seam metal or natural slate installations generally span 4 to 7 days. Every section torn off during the day is dried-in and weatherproofed before our crew departs each evening.",
-    keyTakeaway: "Repairs: 1 day • Shingle Replacements: 2–4 days • Custom Metal/Slate: 4–7 days, with nightly weatherproof dry-in.",
+      "Most repairs and gutter installations take a day. A full architectural-shingle replacement typically takes 2 to 4 days depending on pitch, size and deck condition. Standing-seam metal or slate generally takes 4 to 7 days. Any section opened during the day is dried-in and weatherproofed before the crew leaves.",
   },
   {
-    id: "faq-04",
-    category: "Materials & Timeline",
-    question: "What roofing materials do you work with?",
+    id: "faq-materials",
+    category: "Materials and timeline",
+    question: "Which materials do you install?",
     answer:
-      "We install heavyweight architectural and designer asphalt shingles (including UL-2218 Class-4 impact-rated lines), 24-gauge architectural standing-seam metal, natural and composite slate, cedar shake alternatives, low-slope architectural membranes (TPO/EPDM), seamless aluminum and copper gutters, and engineered fiber-cement siding.",
-    keyTakeaway: "Class-4 architectural shingles, 24-gauge standing-seam metal, composite/natural slate, copper accents, and fiber-cement siding.",
+      "Heavyweight architectural shingles (including UL 2218 Class-4 impact-rated lines), 24-gauge standing-seam metal, natural and composite slate, cedar-shake alternatives, low-slope TPO and EPDM membranes, seamless aluminum and copper gutters, and fiber-cement siding.",
   },
   {
-    id: "faq-05",
-    category: "Storm & Warranty",
-    question: "Can you help with storm damage?",
+    id: "faq-storm",
+    category: "Storm and warranty",
+    question: "Can you help after storm damage?",
     answer:
-      "Absolutely. If your property experiences high winds, hail, or fallen branches, we provide priority tarping to stop active water intrusion and perform a forensic storm damage assessment. We supply organized, timestamped photo documentation and itemized repair or replacement scopes to help you understand the exact extent of weather-related damage.",
-    keyTakeaway: "Rapid weatherproof stabilization plus detailed photographic storm documentation and restoration scopes.",
+      "Yes. We tarp quickly to stop active leaks, then assess the damage and give you timestamped photos and an itemized repair or replacement scope, so you understand exactly what the weather did.",
   },
   {
-    id: "faq-06",
-    category: "Storm & Warranty",
-    question: "Do you provide roofing warranties?",
+    id: "faq-warranty",
+    category: "Storm and warranty",
+    question: "What warranty do I get?",
     answer:
-      "Yes. Every project is backed by manufacturer material warranties on the products selected, paired with written workmanship coverage on our installation labor. Because warranty duration and terms vary by material system and project scope (such as repair versus full system replacement), we provide complete written warranty documentation directly inside your project proposal before work begins.",
-    keyTakeaway: "Written manufacturer material coverage + transparent workmanship protection specified in every project proposal.",
+      "Manufacturer warranties cover the products we install, and we add written workmanship coverage on our labor. Terms differ between a repair and a full system, so the complete warranty documentation is in your proposal before any work begins.",
   },
 ];

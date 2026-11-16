@@ -1,94 +1,31 @@
 export interface ImageAsset {
   url: string;
   alt: string;
-  caption?: string;
-  creditNote?: string;
 }
 
+const u = (id: string, w = 1800, q = 80) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=${q}`;
+
 /**
- * Centralized Unsplash Architectural & Roofing Image Configuration
- * All URLs use stable direct images.unsplash.com endpoints with explicit crop & quality parameters.
+ * Photography is hot-linked from Unsplash (images.unsplash.com is allowed in
+ * next.config.ts). Swap any URL for your own photography; keep the alt text
+ * specific to what the photo shows.
  */
-export const IMAGES: Record<string, ImageAsset> = {
-  heroArchitecture: {
-    url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85",
-    alt: "Contemporary luxury residence with dark architectural standing-seam and slate roofing line at dusk",
-    caption: "Architectural Standing-Seam & Natural Slate Envelope — Sample Showcase",
-  },
-  heroFloatingDetail: {
-    url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=900&q=80",
-    alt: "Modern residential elevation featuring custom copper fascia and precision roof overhangs",
-  },
-  serviceReplacement: {
-    url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
-    alt: "Complete residential roof replacement featuring high-definition architectural shingles and metal accents",
-  },
-  serviceRepair: {
-    url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80",
-    alt: "Precision roof flashing and ridge detail restoration on contemporary gable structure",
-  },
-  serviceInspection: {
-    url: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1000&q=80",
-    alt: "Multi-point architectural roof envelope diagnostic inspection on modern two-story home",
-  },
-  serviceStorm: {
-    url: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1000&q=80",
-    alt: "Weather-hardened residential roof restored after severe wind and hail exposure",
-  },
-  serviceGutter: {
-    url: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1000&q=80",
-    alt: "Seamless box-profile architectural gutter and copper downspout drainage system",
-  },
-  serviceSiding: {
-    url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80",
-    alt: "Architectural fiber-cement siding, cedar soffits, and thermally broken exterior envelope",
-  },
-  aboutPrimaryCraft: {
-    url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80",
-    alt: "Roofing craftsman inspecting structural timber decking and weatherproof underlayment alignment",
-  },
-  aboutSecondaryMaterial: {
-    url: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=900&q=80",
-    alt: "Architectural construction blueprints and precision copper and slate material samples",
-  },
-  project1After: {
-    url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85",
-    alt: "Completed modern residential roof replacement with charcoal standing-seam metal and warm soffit lighting",
-  },
-  project1Before: {
-    url: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1400&q=80",
-    alt: "Weathered older pitched residential roof prior to comprehensive structural re-roofing transformation",
-  },
-  project2After: {
-    url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=85",
-    alt: "Restored estate residence featuring impact-rated architectural slate shingles after storm restoration",
-  },
-  project2Before: {
-    url: "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=1400&q=80",
-    alt: "Aged traditional residential roof showing granule wear and storm-weathered ridge lines prior to restoration",
-  },
-  project3After: {
-    url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
-    alt: "Contemporary exterior renovation with custom burnt-copper fascia, charcoal cladding, and low-slope roof membrane",
-  },
-  project3Before: {
-    url: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1400&q=80",
-    alt: "Dated suburban exterior elevation prior to roof overhang rebuild and architectural siding transformation",
-  },
-  finalCtaBackdrop: {
-    url: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1800&q=85",
-    alt: "Twilight architectural photograph of a protected contemporary home under clear evening skies",
-  },
-  avatar1: {
-    url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
-    alt: "Sample client portrait — Elena Vance",
-  },
-  avatar2: {
-    url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
-    alt: "Sample client portrait — Marcus Sterling",
-  },
-  avatar3: {
-    url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
-    alt: "Sample client portrait — Claire & Julian Mercer",
-  },
-};
+export const IMAGES = {
+  hero: { url: u("1600585154340-be6161a56a0c", 2200, 80), alt: "Contemporary home with a dark metal roof at dusk" },
+  heroDetail: { url: u("1513694203232-719a280e022f", 1400), alt: "Pitched roof ridge and gable against the sky" },
+  serviceReplacement: { url: u("1600607687939-ce8a6c25118c", 1400), alt: "Newly roofed modern home with clean rooflines" },
+  serviceRepair: { url: u("1513694203232-719a280e022f", 1400), alt: "Roof ridge and flashing detail" },
+  serviceInspection: { url: u("1580587771525-78b9dba3b914", 1400), alt: "Large two-story home, roof visible from the street" },
+  serviceStorm: { url: u("1600566753376-12c8ab7fb75b", 1400), alt: "Home with a weathered roof after a storm season" },
+  serviceGutter: { url: u("1600585154526-990dced4db0d", 1400), alt: "Roof edge and gutter on a modern home" },
+  serviceSiding: { url: u("1600607687920-4e2a09cf159d", 1400), alt: "Home exterior with clean siding and trim" },
+  craft: { url: u("1504307651254-35680f356dfd", 1400), alt: "Roofing craftsman at work on timber decking" },
+  materials: { url: u("1541888946425-d81bb19240f5", 1200), alt: "Construction drawings and material samples on a table" },
+  project1: { url: u("1600607687939-ce8a6c25118c", 1800), alt: "Standing-seam metal roof on a contemporary home" },
+  project2: { url: u("1600596542815-ffad4c1539a9", 1800), alt: "Restored estate home with a new slate-profile roof" },
+  project3: { url: u("1600585154526-990dced4db0d", 1800), alt: "Renovated home exterior at twilight with new roofline and cladding" },
+  cta: { url: u("1600566753190-17f0baa2a6c3", 2200, 75), alt: "Home glowing at twilight under a sound roof" },
+} satisfies Record<string, ImageAsset>;
+
+export type ImageKey = keyof typeof IMAGES;

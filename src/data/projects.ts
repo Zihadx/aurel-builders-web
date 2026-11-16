@@ -1,68 +1,62 @@
 import { ProjectItem } from "@/types";
 
-/**
- * Sample Architectural Portfolio Projects
- * Uses distinct, verified before & after photographs for interactive slider comparison.
- */
+/** Sample projects. Replace with real case studies and photography. */
 export const PROJECTS_DATA: ProjectItem[] = [
   {
-    id: "kensington-ridge-residence",
-    title: "Modern Residential Roof Replacement",
-    category: "Roof Replacement",
-    locationSample: "Oakridge Architectural District (Sample Location)",
-    yearSample: "2026 Sample Case Study",
-    materialSystem: "24-Gauge Matte Obsidian Standing-Seam & Burnt Copper Fascia",
-    squareFootageSample: "4,850 sq. ft. Roof Footprint",
-    completionDurationSample: "4 Days",
+    id: "oakridge-replacement",
+    title: "Standing-seam replacement",
+    category: "Roof replacement",
+    location: "Oakridge district",
+    system: "24-gauge matte standing-seam with copper fascia",
+    footprint: "4,850 sq ft roof",
+    duration: "4 days",
     summary:
-      "Transformed an aging, heat-retaining asphalt roof into a crisp architectural standing-seam envelope with concealed fasteners and integrated snow-retention rails.",
+      "An aging asphalt roof became a standing-seam system with concealed fasteners and integrated snow-retention rails.",
     challenge:
-      "The residence experienced recurring valley ice-dam seepage and severe attic heat gain across three intersecting low-slope and steep-slope roof planes.",
+      "Recurring ice-dam leaks in the valleys and heavy attic heat gain across three intersecting roof planes.",
     resolution:
-      "Installed high-temperature peel-and-stick membrane across 100% of the deck, ventilated furring channels, and custom-seamed 24-gauge Kynar-coated metal panels.",
-    afterImageKey: "project1After",
-    beforeImageKey: "project1Before",
-    beforeLabel: "BEFORE // WEATHERED ASPHALT SHINGLE ENVELOPE (SAMPLE)",
-    afterLabel: "AFTER // STANDING-SEAM ARCHITECTURAL SYSTEM (SAMPLE)",
+      "Ice-and-water membrane over the whole deck, ventilated furring channels, and custom-seamed metal panels.",
+    before: "worn",
+    after: "seam",
+    beforeLabel: "Worn asphalt shingle",
+    afterLabel: "Standing-seam metal",
   },
   {
-    id: "hawthorne-estate-restoration",
-    title: "Traditional Home Storm Restoration",
-    category: "Storm Restoration",
-    locationSample: "Highland Reserve Estates (Sample Location)",
-    yearSample: "2026 Sample Case Study",
-    materialSystem: "Class-4 Impact-Rated Architectural Slate-Profile Shingles",
-    squareFootageSample: "5,400 sq. ft. Roof Footprint",
-    completionDurationSample: "3 Days",
+    id: "highland-storm",
+    title: "Hail damage restoration",
+    category: "Storm restoration",
+    location: "Highland Reserve",
+    system: "Class-4 impact-rated slate-profile shingle",
+    footprint: "5,400 sq ft roof",
+    duration: "3 days",
     summary:
-      "Full structural storm restoration following severe hail impact, upgrading the residence to UL-2218 Class-4 impact resistance with hand-soldered copper chimney flashings.",
+      "Full restoration after severe hail, upgraded to UL 2218 Class-4 impact resistance with hand-soldered copper chimney flashing.",
     challenge:
-      "Wind-driven hail fractured over 60% of the existing ridge caps and compromised three skylight perimeter flashings, causing slow ceiling moisture staining.",
+      "Hail fractured most of the ridge caps and compromised three skylight flashings, leaving slow ceiling stains.",
     resolution:
-      "Executed rapid dry-in stabilization, replaced compromised decking sheets, re-flashed all skylights with custom metal curbs, and installed heavyweight dimensional shingles.",
-    afterImageKey: "project2After",
-    beforeImageKey: "project2Before",
-    beforeLabel: "BEFORE // HAIL-IMPACTED RIDGE & GRANULE WEAR (SAMPLE)",
-    afterLabel: "AFTER // CLASS-4 IMPACT ARCHITECTURAL SHINGLE SYSTEM (SAMPLE)",
+      "Rapid dry-in, replaced deck sheets, new metal skylight curbs, and heavyweight dimensional shingles.",
+    before: "hail",
+    after: "slate",
+    beforeLabel: "Hail-damaged shingle",
+    afterLabel: "Class-4 slate profile",
   },
   {
-    id: "veridian-courtyard-house",
-    title: "Contemporary Exterior Renovation",
-    category: "Exterior Renovation",
-    locationSample: "Cedar Crest Hills (Sample Location)",
-    yearSample: "2025 Sample Case Study",
-    materialSystem: "Architectural Fiber-Cement Cladding, Box Gutters & Roof Overhangs",
-    squareFootageSample: "6,100 sq. ft. Combined Envelope",
-    completionDurationSample: "7 Days",
+    id: "cedar-crest-exterior",
+    title: "Roofline and exterior renewal",
+    category: "Exterior renovation",
+    location: "Cedar Crest Hills",
+    system: "Fiber-cement cladding, box gutters and rebuilt overhangs",
+    footprint: "6,100 sq ft combined envelope",
+    duration: "7 days",
     summary:
-      "Comprehensive roof and facade renewal unifying the roofline, 6-inch seamless box gutters, ventilated soffits, and thermally isolated exterior cladding.",
+      "Roof and facade renewal that unified the roofline, 6-inch seamless gutters, ventilated soffits and wall cladding.",
     challenge:
-      "Undersized 4-inch gutters and unventilated eaves caused fascia rot and rainwater cascading across the primary entryway during heavy downpours.",
+      "Undersized 4-inch gutters and unvented eaves caused fascia rot and water spilling across the front entry.",
     resolution:
-      "Re-engineered the eave overhang geometry, installed concealed-hanger 6-inch seamless drainage, and wrapped the exterior in moisture-proof barrier and modern siding.",
-    afterImageKey: "project3After",
-    beforeImageKey: "project3Before",
-    beforeLabel: "BEFORE // DATED EAVES & UNDERSIZED DRAINAGE (SAMPLE)",
-    afterLabel: "AFTER // INTEGRATED ROOF, SOFFIT & CLADDING ENVELOPE (SAMPLE)",
+      "Rebuilt the eave geometry, fitted concealed-hanger 6-inch gutters, and wrapped the walls in barrier and new cladding.",
+    before: "dated",
+    after: "clad",
+    beforeLabel: "Aged roofline and eaves",
+    afterLabel: "Renewed roofline and cladding",
   },
 ];

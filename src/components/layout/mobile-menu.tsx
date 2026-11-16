@@ -1,112 +1,118 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import { X } from "lucide-react";
 import { NAVIGATION_LINKS } from "@/data/navigation";
 import { SITE_CONFIG } from "@/data/site";
+import { Button } from "@/components/ui/button";
 import { scrollToSection } from "@/lib/utils";
+import { whatsappUrl } from "@/lib/whatsapp";
 
-interface MobileMenuProps {
+interface Props {
   isOpen: boolean;
   onClose: () => void;
+  onHome: boolean;
 }
 
-export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+const FOCUSABLE = 'a[href], button:not([disabled])';
+
+export function MobileMenu({ isOpen, onClose, onHome }: Props) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) onClose();
+    if (!isOpen) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    document.body.style.overflow = "hidden";
+    panelRef.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      // Keep Tab inside the dialog
+      if (e.key === "Tab" && panelRef.current) {
+        const items = Array.from(panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE));
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.body.style.overflow = "";
-    }
+    window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", onKey);
+      previouslyFocused?.focus?.();
     };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
-  const handleNavClick = (href: string) => {
-    onClose();
-    setTimeout(() => scrollToSection(href), 100);
-  };
-
   return (
     <div
-      className="fixed inset-0 z-50 lg:hidden"
+      ref={panelRef}
       role="dialog"
       aria-modal="true"
-      aria-label="Mobile Navigation"
+      aria-label="Menu"
+      className="on-deep fixed inset-0 z-50 flex flex-col bg-deep text-chalk lg:hidden"
     >
-      <div
-        className="fixed inset-0 bg-obsidian/80 backdrop-blur-md"
-        onClick={onClose}
-      />
-      <div className="fixed inset-y-3 right-3 w-[calc(100%-1.5rem)] max-w-sm rounded-3xl bg-obsidian border border-white/10 p-7 flex flex-col justify-between overflow-y-auto shadow-2xl text-ivory">
-        <div>
-          <div className="flex items-center justify-between pb-6 border-b border-white/10">
-            <div>
-              <span className="font-display text-lg font-bold tracking-widest block">
-                {SITE_CONFIG.shortName}
-              </span>
-              <span className="font-serif italic text-sm text-copperLight">
-                Architectural Roofing
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={onClose}
-              className="h-9 w-9 rounded-full bg-white/10 flex items-center justify-center text-ivory hover:bg-copper cursor-pointer"
-              aria-label="Close menu"
-            >
-              ✕
-            </button>
-          </div>
-          <nav className="mt-7 space-y-1.5">
-            {NAVIGATION_LINKS.map((item, idx) => (
-              <button
-                key={item.href}
-                type="button"
-                onClick={() => handleNavClick(item.href)}
-                className="w-full flex items-center justify-between py-3 px-4 rounded-2xl text-left font-display text-lg font-medium text-ivory hover:bg-white/5 cursor-pointer"
+      <div className="wrap flex h-16 items-center justify-between">
+        <span className="font-sans text-lg font-semibold tracking-[0.04em] [font-stretch:115%]">
+          {SITE_CONFIG.shortName}
+        </span>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close menu"
+          className="-mr-2 grid h-11 w-11 cursor-pointer place-items-center"
+        >
+          <X className="h-6 w-6" aria-hidden="true" />
+        </button>
+      </div>
+
+      <nav aria-label="Primary" className="wrap flex-1 overflow-y-auto pt-6">
+        <ul className="divide-y divide-rule-deep border-y border-rule-deep">
+          {NAVIGATION_LINKS.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={onHome ? link.href : `/${link.href}`}
+                onClick={(e) => {
+                  onClose();
+                  if (onHome) {
+                    e.preventDefault();
+                    setTimeout(() => scrollToSection(link.href), 60);
+                  }
+                }}
+                className="t-h3 block py-5"
               >
-                <span>{item.label}</span>
-                <span className="font-serif italic text-copperLight">
-                  0{idx + 1}
-                </span>
-              </button>
-            ))}
-          </nav>
-        </div>
-        <div className="pt-6 border-t border-white/10 space-y-4">
-          <div className="p-4 rounded-2xl bg-white/5 space-y-1">
-            <div className="text-xs text-copperLight font-medium">
-              Direct Architectural Desk
-            </div>
-            <a
-              href={SITE_CONFIG.contact.phoneHref}
-              className="block font-display text-lg font-semibold text-ivory"
-            >
-              {SITE_CONFIG.contact.phoneDisplay}
-            </a>
-            <a
-              href={`mailto:${SITE_CONFIG.contact.email}`}
-              className="block text-xs text-ivory/60"
-            >
-              {SITE_CONFIG.contact.email}
-            </a>
-          </div>
-          <button
-            type="button"
-            onClick={() => handleNavClick("#contact")}
-            className="btn-beveled-primary w-full h-12 rounded-full text-white font-semibold text-sm cursor-pointer"
-          >
-            Get Your Free Estimate ↗
-          </button>
-        </div>
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="wrap space-y-4 pb-8 pt-6">
+        <Button href="/book" size="lg" className="w-full" onClick={onClose}>
+          Book a free inspection
+        </Button>
+        <Button href={whatsappUrl()} variant="outline-deep" size="lg" className="w-full">
+          Chat on WhatsApp
+        </Button>
+        <a
+          href={SITE_CONFIG.contact.phoneHref}
+          className="block text-center text-[0.9375rem] text-mist"
+        >
+          Or call {SITE_CONFIG.contact.phoneDisplay}
+        </a>
       </div>
     </div>
   );
